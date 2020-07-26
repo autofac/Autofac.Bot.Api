@@ -20,8 +20,6 @@ namespace Autofac.Benchmark.Api.Controllers
             "bench", "Autofac.Benchmarks",
             "bin", "Release", "netcoreapp3.1", "Autofac.Benchmarks.dll");
 
-        private const string BenchmarkName = "DeepGraphResolveBenchmark";
-
         private RepositoryCloner cloner;
         private BranchLoader branchLoader;
 
@@ -42,13 +40,13 @@ namespace Autofac.Benchmark.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> ExecuteAsync([FromBody] BenchmarkRequestDto benchmarkRequest)
         {
-            var summarySource = await ExecuteForSourceBranch(benchmarkRequest.SourceRepository);
-            var summaryTarget = await ExecuteForTargetBranch(benchmarkRequest.TargetRepository);
+            var summarySource = await ExecuteForSourceBranch(benchmarkRequest.SourceRepository, benchmarkRequest.Benchmark);
+            var summaryTarget = await ExecuteForTargetBranch(benchmarkRequest.TargetRepository, benchmarkRequest.Benchmark);
 
             return File(Encoding.UTF8.GetBytes($"{summarySource}\n\n{summaryTarget}"), "text/html");
         }
 
-        private async Task<string> ExecuteForSourceBranch(RepositoryDto repository)
+        private async Task<string> ExecuteForSourceBranch(RepositoryDto repository, string benchmark)
         {
             var (_, clonePath) =
                 await cloner.CloneAsync(new Uri(repository.Url, UriKind.Absolute));
@@ -59,14 +57,14 @@ namespace Autofac.Benchmark.Api.Controllers
 
             var (_, output) =
                 await benchmarkExecutor.ExecuteAsync(new Uri(BenchmarkExecuteablePath, UriKind.Absolute),
-                    BenchmarkName);
+                    benchmark);
 
             var summary = summaryExtractor.ExtractSummary(output);
 
             return summary;
         }
 
-        private async Task<string> ExecuteForTargetBranch(RepositoryDto repository)
+        private async Task<string> ExecuteForTargetBranch(RepositoryDto repository, string benchmark)
         {
             var (_, clonePath) =
                 await cloner.CloneAsync(new Uri(repository.Url, UriKind.Absolute));
@@ -77,7 +75,7 @@ namespace Autofac.Benchmark.Api.Controllers
 
             var (_, output) =
                 await benchmarkExecutor.ExecuteAsync(new Uri(BenchmarkExecuteablePath, UriKind.Absolute),
-                    BenchmarkName);
+                    benchmark);
 
             var summary = summaryExtractor.ExtractSummary(output);
 

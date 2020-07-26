@@ -20,46 +20,52 @@ namespace Autofac.Benchmark.Api.Controllers
             "bench", "Autofac.Benchmarks",
             "bin", "Release", "netcoreapp3.1", "Autofac.Benchmarks.dll");
 
-        private RepositoryCloner cloner;
-        private BranchLoader branchLoader;
+        private readonly RepositoryCloner _cloner;
+        private readonly BranchLoader _branchLoader;
 
-        private ProjectBuilder projectBuilder;
-        private BenchmarkExecutor benchmarkExecutor;
-        private SummaryExtractor summaryExtractor;
+        private readonly ProjectBuilder _projectBuilder;
+        private readonly BenchmarkExecutor _benchmarkExecutor;
+        private readonly SummaryExtractor _summaryExtractor;
 
         public BenchmarksController(BranchLoader branchLoader, RepositoryCloner cloner, ProjectBuilder projectBuilder,
             BenchmarkExecutor benchmarkExecutor, SummaryExtractor summaryExtractor)
         {
-            this.branchLoader = branchLoader;
-            this.cloner = cloner;
-            this.projectBuilder = projectBuilder;
-            this.benchmarkExecutor = benchmarkExecutor;
-            this.summaryExtractor = summaryExtractor;
+            _branchLoader = branchLoader;
+            _cloner = cloner;
+            _projectBuilder = projectBuilder;
+            _benchmarkExecutor = benchmarkExecutor;
+            _summaryExtractor = summaryExtractor;
         }
 
         [HttpPost]
         public async Task<IActionResult> ExecuteAsync([FromBody] BenchmarkRequestDto benchmarkRequest)
         {
-            var summarySource = await ExecuteForSourceBranch(benchmarkRequest.SourceRepository, benchmarkRequest.Benchmark);
-            var summaryTarget = await ExecuteForTargetBranch(benchmarkRequest.TargetRepository, benchmarkRequest.Benchmark);
+            var summarySource =
+                await ExecuteForSourceBranch(benchmarkRequest.SourceRepository, benchmarkRequest.Benchmark);
+            var summaryTarget =
+                await ExecuteForTargetBranch(benchmarkRequest.TargetRepository, benchmarkRequest.Benchmark);
 
-            return File(Encoding.UTF8.GetBytes($"{summarySource}\n\n{summaryTarget}"), "text/html");
+            var resultPartOne = $"#### {benchmarkRequest.SourceRepository.Branch}{Environment.NewLine}{summarySource}";
+            var sep = $"{Environment.NewLine}{Environment.NewLine}";
+            var resultPartTwo = $"#### {benchmarkRequest.TargetRepository.Branch}{Environment.NewLine}{summaryTarget}";
+
+            return File(Encoding.UTF8.GetBytes($"{resultPartOne}{sep}{resultPartTwo}"), "text/html");
         }
 
         private async Task<string> ExecuteForSourceBranch(RepositoryDto repository, string benchmark)
         {
             var (_, clonePath) =
-                await cloner.CloneAsync(new Uri(repository.Url, UriKind.Absolute));
+                await _cloner.CloneAsync(new Uri(repository.Url, UriKind.Absolute));
 
-            await branchLoader.LoadAsync(clonePath, repository.Branch);
+            await _branchLoader.LoadAsync(clonePath, repository.Branch);
 
-            await projectBuilder.BuildAsync(new Uri(BenchmarkProjectPath, UriKind.Absolute));
+            await _projectBuilder.BuildAsync(new Uri(BenchmarkProjectPath, UriKind.Absolute));
 
             var (_, output) =
-                await benchmarkExecutor.ExecuteAsync(new Uri(BenchmarkExecuteablePath, UriKind.Absolute),
+                await _benchmarkExecutor.ExecuteAsync(new Uri(BenchmarkExecuteablePath, UriKind.Absolute),
                     benchmark);
 
-            var summary = summaryExtractor.ExtractSummary(output);
+            var summary = _summaryExtractor.ExtractSummary(output);
 
             return summary;
         }
@@ -67,17 +73,17 @@ namespace Autofac.Benchmark.Api.Controllers
         private async Task<string> ExecuteForTargetBranch(RepositoryDto repository, string benchmark)
         {
             var (_, clonePath) =
-                await cloner.CloneAsync(new Uri(repository.Url, UriKind.Absolute));
+                await _cloner.CloneAsync(new Uri(repository.Url, UriKind.Absolute));
 
-            await branchLoader.LoadAsync(clonePath, repository.Branch);
+            await _branchLoader.LoadAsync(clonePath, repository.Branch);
 
-            await projectBuilder.BuildAsync(new Uri(BenchmarkProjectPath, UriKind.Absolute));
+            await _projectBuilder.BuildAsync(new Uri(BenchmarkProjectPath, UriKind.Absolute));
 
             var (_, output) =
-                await benchmarkExecutor.ExecuteAsync(new Uri(BenchmarkExecuteablePath, UriKind.Absolute),
+                await _benchmarkExecutor.ExecuteAsync(new Uri(BenchmarkExecuteablePath, UriKind.Absolute),
                     benchmark);
 
-            var summary = summaryExtractor.ExtractSummary(output);
+            var summary = _summaryExtractor.ExtractSummary(output);
 
             return summary;
         }

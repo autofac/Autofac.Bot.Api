@@ -7,14 +7,17 @@ namespace Autofac.Benchmark.Api.Tools
 {
     public static class ProcessExecutor
     {
-        public static async Task<Result<string>> RunAsync(ProcessStartInfo processStartInfo)
+        public static async Task<Result<string>> ExecuteAsync(ProcessStartInfo processStartInfo)
         {
             using var process = Process.Start(processStartInfo);
             if (process == null) return Result.Failure<string>("Couldn't start process to create library!");
 
             var output = await process.StandardOutput.ReadToEndAsync();
 
-            process.WaitForExit(60 * 1000 * 5);
+            while (!process.HasExited)
+            {
+                await Task.Delay(10);
+            }
 
             try
             {
@@ -25,6 +28,11 @@ namespace Autofac.Benchmark.Api.Tools
             catch (Exception)
             {
                 return Result.Failure<string>(output);
+            }
+            finally
+            {
+                process.Close();
+                // process.Kill(true);
             }
         }
     }

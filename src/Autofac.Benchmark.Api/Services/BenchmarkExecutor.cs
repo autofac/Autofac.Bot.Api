@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Benchmark.Api.Tools;
 using CSharpFunctionalExtensions;
@@ -15,11 +17,19 @@ namespace Autofac.Benchmark.Api.Services
             _logger = logger;
         }
 
-        public async Task<(bool succeeded, string output)> ExecuteAsync(Uri benchmarkAssemblyUri, string benchmarkName)
+        public async Task<(bool succeeded, string output)> ExecuteAsync(Uri benchmarkBuildOutputUri, string assemblyName, string benchmarkName)
         {
-            var benchmarkProcess = ProcessFactory.Create("dotnet", $"{benchmarkAssemblyUri.LocalPath} --filter *{benchmarkName}*");
+            var localBasePath = benchmarkBuildOutputUri.LocalPath;
 
-            var (succeeded, _, benchmarkOutput, benchmarkError) = await ProcessExecutor.RunAsync(benchmarkProcess);
+            var directories = Directory.EnumerateDirectories(localBasePath);
+
+            var targetFrameworkMonikerPath = directories.First()!;
+
+            var executeablePath = Path.Combine(targetFrameworkMonikerPath, assemblyName);
+            
+            var benchmarkProcess = ProcessFactory.Create("dotnet", $"{executeablePath} --filter *{benchmarkName}*");
+
+            var (succeeded, _, benchmarkOutput, benchmarkError) = await ProcessExecutor.ExecuteAsync(benchmarkProcess);
             
             if (!succeeded) _logger.LogError("Failed to execute Benchmark. Error:{newLine}{error}}", Environment.NewLine, benchmarkError);
 

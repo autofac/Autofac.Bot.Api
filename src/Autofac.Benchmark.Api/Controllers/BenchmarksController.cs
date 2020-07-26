@@ -16,9 +16,11 @@ namespace Autofac.Benchmark.Api.Controllers
             "Autofac.Benchmarks",
             "Autofac.Benchmarks.csproj");
 
-        private static readonly string BenchmarkExecuteablePath = Path.Combine(AppContext.BaseDirectory, "Autofac",
+        private static readonly string BenchmarkBuildOutputBasePath = Path.Combine(AppContext.BaseDirectory, "Autofac",
             "bench", "Autofac.Benchmarks",
-            "bin", "Release", "netcoreapp3.1", "Autofac.Benchmarks.dll");
+            "bin", "Release");
+
+        private const string BenchmarkAssemblyName = "Autofac.Benchmarks.dll";
 
         private readonly RepositoryCloner _cloner;
         private readonly BranchLoader _branchLoader;
@@ -42,13 +44,15 @@ namespace Autofac.Benchmark.Api.Controllers
         {
             var summaryTarget =
                 await ExecuteForTargetBranch(benchmarkRequest.TargetRepository, benchmarkRequest.Benchmark);
-            
+
             var summarySource =
                 await ExecuteForSourceBranch(benchmarkRequest.SourceRepository, benchmarkRequest.Benchmark);
 
             var header = $"## {benchmarkRequest.Benchmark}{Environment.NewLine}{Environment.NewLine}";
-            var resultPartOne = $"#### {benchmarkRequest.TargetRepository.Branch} (Target){Environment.NewLine}{summaryTarget}";
-            var resultPartTwo = $"#### {benchmarkRequest.SourceRepository.Branch} (Source){Environment.NewLine}{summarySource}";
+            var resultPartOne =
+                $"#### {benchmarkRequest.TargetRepository.Branch} (Target){Environment.NewLine}{summaryTarget}";
+            var resultPartTwo =
+                $"#### {benchmarkRequest.SourceRepository.Branch} (Source){Environment.NewLine}{summarySource}";
             var sep = $"{Environment.NewLine}{Environment.NewLine}";
 
             return File(Encoding.UTF8.GetBytes($"{header}{resultPartOne}{sep}{resultPartTwo}"), "text/html");
@@ -64,7 +68,8 @@ namespace Autofac.Benchmark.Api.Controllers
             await _projectBuilder.BuildAsync(new Uri(BenchmarkProjectPath, UriKind.Absolute));
 
             var (_, output) =
-                await _benchmarkExecutor.ExecuteAsync(new Uri(BenchmarkExecuteablePath, UriKind.Absolute),
+                await _benchmarkExecutor.ExecuteAsync(new Uri(BenchmarkBuildOutputBasePath, UriKind.Absolute),
+                    BenchmarkAssemblyName,
                     benchmark);
 
             var summary = _summaryExtractor.ExtractSummary(output);
@@ -82,7 +87,8 @@ namespace Autofac.Benchmark.Api.Controllers
             await _projectBuilder.BuildAsync(new Uri(BenchmarkProjectPath, UriKind.Absolute));
 
             var (_, output) =
-                await _benchmarkExecutor.ExecuteAsync(new Uri(BenchmarkExecuteablePath, UriKind.Absolute),
+                await _benchmarkExecutor.ExecuteAsync(new Uri(BenchmarkBuildOutputBasePath, UriKind.Absolute),
+                    BenchmarkAssemblyName,
                     benchmark);
 
             var summary = _summaryExtractor.ExtractSummary(output);

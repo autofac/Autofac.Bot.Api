@@ -22,10 +22,12 @@ namespace Autofac.Benchmark.Api.Services
             
             if (Directory.Exists(clonePath)) Directory.Delete(clonePath, true);
 
+            Directory.CreateDirectory(clonePath);
+
             var cloneProcess =
                 ProcessFactory.Create("git", $"clone {repositoryUri} {clonePath}");
             
-            var (succeeded, _, _, cloneError) = await ProcessExecutor.RunAsync(cloneProcess);
+            var (succeeded, _, _, cloneError) = await ProcessExecutor.ExecuteAsync(cloneProcess);
             
             if (!succeeded)
                 _logger.LogError("Failed to clone repository. Error:{newLine}{error}}", Environment.NewLine, cloneError);

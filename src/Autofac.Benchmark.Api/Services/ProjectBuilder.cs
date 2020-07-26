@@ -19,7 +19,7 @@ namespace Autofac.Benchmark.Api.Services
         {
             var process = ProcessFactory.Create("dotnet", $"build -c Release {projectUri.LocalPath}");
 
-            var (succeeded, _, _, buildError) = await ProcessExecutor.RunAsync(process);
+            var (succeeded, _, _, buildError) = await ProcessExecutor.ExecuteAsync(process);
 
             if (!succeeded)
                 _logger.LogError("Failed to load branch. Error:{newLine}{error}}", Environment.NewLine, buildError);

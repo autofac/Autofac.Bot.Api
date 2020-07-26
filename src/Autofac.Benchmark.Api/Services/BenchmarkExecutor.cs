@@ -17,7 +17,7 @@ namespace Autofac.Benchmark.Api.Services
 
         public async Task<(bool succeeded, string output)> ExecuteAsync(Uri benchmarkAssemblyUri, string benchmarkName)
         {
-            var benchmarkProcess = ProcessFactory.Create("dotnet", $"{benchmarkAssemblyUri.LocalPath} --filter {benchmarkName}");
+            var benchmarkProcess = ProcessFactory.Create("dotnet", $"{benchmarkAssemblyUri.LocalPath} --filter *{benchmarkName}*");
 
             var (succeeded, _, benchmarkOutput, benchmarkError) = await ProcessExecutor.RunAsync(benchmarkProcess);
             

@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace Autofac.Benchmark.Api
 {
@@ -16,6 +17,12 @@ namespace Autofac.Benchmark.Api
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .UseContentRoot(AppContext.BaseDirectory)
+                .UseSerilog(ConfigureLogger)
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+        
+        private static void ConfigureLogger(HostBuilderContext context, LoggerConfiguration loggerConfiguration)
+        {
+            loggerConfiguration.ReadFrom.Configuration(context.Configuration);
+        }
     }
 }

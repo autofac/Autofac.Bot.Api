@@ -4,6 +4,7 @@ namespace Autofac.Benchmark.Api.Services
 {
     public class SummaryExtractor
     {
+        // ReSharper disable once MemberCanBeMadeStatic.Global
         public string ExtractSummary(string benchmarkResult)
         {
             var indexOfSummary =
@@ -18,8 +19,6 @@ namespace Autofac.Benchmark.Api.Services
             var lastIndexOfPipe = summary.LastIndexOf("|", StringComparison.InvariantCultureIgnoreCase);
 
             return summary.Substring(firstIndexOfPipe, lastIndexOfPipe + 1 - firstIndexOfPipe);
-
-            // return summary;
         }
     }
 }

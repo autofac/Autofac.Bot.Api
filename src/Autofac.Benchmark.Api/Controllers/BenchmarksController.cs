@@ -40,16 +40,18 @@ namespace Autofac.Benchmark.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> ExecuteAsync([FromBody] BenchmarkRequestDto benchmarkRequest)
         {
-            var summarySource =
-                await ExecuteForSourceBranch(benchmarkRequest.SourceRepository, benchmarkRequest.Benchmark);
             var summaryTarget =
                 await ExecuteForTargetBranch(benchmarkRequest.TargetRepository, benchmarkRequest.Benchmark);
+            
+            var summarySource =
+                await ExecuteForSourceBranch(benchmarkRequest.SourceRepository, benchmarkRequest.Benchmark);
 
-            var resultPartOne = $"#### {benchmarkRequest.SourceRepository.Branch}{Environment.NewLine}{summarySource}";
+            var header = $"## {benchmarkRequest.Benchmark}{Environment.NewLine}{Environment.NewLine}";
+            var resultPartOne = $"#### {benchmarkRequest.TargetRepository.Branch} (Target){Environment.NewLine}{summaryTarget}";
+            var resultPartTwo = $"#### {benchmarkRequest.SourceRepository.Branch} (Source){Environment.NewLine}{summarySource}";
             var sep = $"{Environment.NewLine}{Environment.NewLine}";
-            var resultPartTwo = $"#### {benchmarkRequest.TargetRepository.Branch}{Environment.NewLine}{summaryTarget}";
 
-            return File(Encoding.UTF8.GetBytes($"{resultPartOne}{sep}{resultPartTwo}"), "text/html");
+            return File(Encoding.UTF8.GetBytes($"{header}{resultPartOne}{sep}{resultPartTwo}"), "text/html");
         }
 
         private async Task<string> ExecuteForSourceBranch(RepositoryDto repository, string benchmark)

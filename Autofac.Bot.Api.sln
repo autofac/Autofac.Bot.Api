@@ -7,6 +7,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1A2EA37C-FD8
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofac.Bot.Api", "src\Autofac.Bot.Api\Autofac.Bot.Api.csproj", "{6FC043FF-382D-4777-8684-C2198200F393}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{8F7555FA-5376-47B6-95D7-59F4AFD4B139}"
+ProjectSection(SolutionItems) = preProject
+	README.md = README.md
+	global.json = global.json
+	.gitignore = .gitignore
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

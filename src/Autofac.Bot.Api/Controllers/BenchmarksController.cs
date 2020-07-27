@@ -2,11 +2,11 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Autofac.Benchmark.Api.Presentation;
-using Autofac.Benchmark.Api.Services;
+using Autofac.Bot.Api.Presentation;
+using Autofac.Bot.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Autofac.Benchmark.Api.Controllers
+namespace Autofac.Bot.Api.Controllers
 {
     [ApiController]
     [Route("api/v1/benchmarks")]

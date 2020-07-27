@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace Autofac.Benchmark.Api.Tools
+namespace Autofac.Bot.Api.Tools
 {
     public static class ProcessFactory
     {

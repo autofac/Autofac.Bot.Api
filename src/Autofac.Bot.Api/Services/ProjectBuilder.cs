@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using Autofac.Benchmark.Api.Tools;
+using Autofac.Bot.Api.Tools;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 
-namespace Autofac.Benchmark.Api.Services
+namespace Autofac.Bot.Api.Services
 {
     public class ProjectBuilder
     {

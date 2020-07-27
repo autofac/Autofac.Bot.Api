@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 
-namespace Autofac.Benchmark.Api.Tools
+namespace Autofac.Bot.Api.Tools
 {
     public static class ProcessExecutor
     {

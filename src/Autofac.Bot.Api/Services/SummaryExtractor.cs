@@ -1,6 +1,6 @@
 using System;
 
-namespace Autofac.Benchmark.Api.Services
+namespace Autofac.Bot.Api.Services
 {
     public class SummaryExtractor
     {

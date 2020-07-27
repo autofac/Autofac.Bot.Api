@@ -1,5 +1,5 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
-namespace Autofac.Benchmark.Api.Presentation
+namespace Autofac.Bot.Api.Presentation
 {
     public class BenchmarkRequestDto
     {

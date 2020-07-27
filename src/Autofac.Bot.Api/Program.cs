@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
-namespace Autofac.Benchmark.Api
+namespace Autofac.Bot.Api
 {
     public static class Program
     {

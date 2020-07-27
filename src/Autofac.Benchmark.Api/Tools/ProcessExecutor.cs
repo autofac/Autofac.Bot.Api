@@ -32,7 +32,7 @@ namespace Autofac.Benchmark.Api.Tools
             finally
             {
                 process.Close();
-                // process.Kill(true);
+                process.Kill(true);
             }
         }
     }

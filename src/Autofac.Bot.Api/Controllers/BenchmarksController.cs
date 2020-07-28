@@ -1,7 +1,10 @@
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Autofac.Bot.Api.Enums;
 using Autofac.Bot.Api.Presentation;
 using Autofac.Bot.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -12,13 +15,27 @@ namespace Autofac.Bot.Api.Controllers
     [Route("api/v1/benchmarks")]
     public class BenchmarksController : ControllerBase
     {
-        private static readonly string BenchmarkProjectPath = Path.Combine(AppContext.BaseDirectory, "Autofac", "bench",
-            "Autofac.Benchmarks",
-            "Autofac.Benchmarks.csproj");
+        // private static readonly string BenchmarkProjectPath = Path.Combine(AppContext.BaseDirectory, "Autofac", "bench",
+        //     "Autofac.Benchmarks",
+        //     "Autofac.Benchmarks.csproj");
 
-        private static readonly string BenchmarkBuildOutputBasePath = Path.Combine(AppContext.BaseDirectory, "Autofac",
-            "bench", "Autofac.Benchmarks",
-            "bin", "Release");
+        private readonly string[] _benchmarkProjectPathValues = {
+            "bench",
+            "Autofac.Benchmarks",
+            "Autofac.Benchmarks.csproj"
+        };
+
+        // private static readonly string BenchmarkBuildOutputBasePath = Path.Combine(AppContext.BaseDirectory, "Autofac",
+        //     "bench", "Autofac.Benchmarks",
+        //     "bin", "Release");
+
+        private readonly string[] _benchmarkBuildOutputBasePathValues =
+        {
+            "bench", 
+            "Autofac.Benchmarks",
+            "bin", 
+            "Release"
+        };
 
         private const string BenchmarkAssemblyName = "Autofac.Benchmarks.dll";
 
@@ -60,15 +77,19 @@ namespace Autofac.Bot.Api.Controllers
 
         private async Task<string> ExecuteForSourceBranch(RepositoryDto repository, string benchmark)
         {
-            var (_, clonePath) =
-                await _cloner.CloneAsync(new Uri(repository.Url, UriKind.Absolute));
+            var (_, clonePath) = await _cloner.CloneAync(new Uri(repository.Url, UriKind.Absolute), RepositoryTarget.Source, Activity.Current.Id);
 
             await _branchLoader.LoadAsync(clonePath, repository.Branch);
 
-            await _projectBuilder.BuildAsync(new Uri(BenchmarkProjectPath, UriKind.Absolute));
+            var buildPath = Path.Combine(clonePath.LocalPath, string.Join(Path.DirectorySeparatorChar, _benchmarkProjectPathValues));
+
+            await _projectBuilder.BuildAsync(new Uri(buildPath, UriKind.Absolute));
+
+            var benchmarkBinaryPath = Path.Combine(clonePath.LocalPath,
+                string.Join(Path.DirectorySeparatorChar, _benchmarkBuildOutputBasePathValues));
 
             var (_, output) =
-                await _benchmarkExecutor.ExecuteAsync(new Uri(BenchmarkBuildOutputBasePath, UriKind.Absolute),
+                await _benchmarkExecutor.ExecuteAsync(new Uri(benchmarkBinaryPath, UriKind.Absolute),
                     BenchmarkAssemblyName,
                     benchmark);
 
@@ -79,15 +100,19 @@ namespace Autofac.Bot.Api.Controllers
 
         private async Task<string> ExecuteForTargetBranch(RepositoryDto repository, string benchmark)
         {
-            var (_, clonePath) =
-                await _cloner.CloneAsync(new Uri(repository.Url, UriKind.Absolute));
+            var (_, clonePath) = await _cloner.CloneAync(new Uri(repository.Url, UriKind.Absolute), RepositoryTarget.Target, Activity.Current.Id);
 
             await _branchLoader.LoadAsync(clonePath, repository.Branch);
 
-            await _projectBuilder.BuildAsync(new Uri(BenchmarkProjectPath, UriKind.Absolute));
+            var buildPath = Path.Combine(clonePath.LocalPath, string.Join(Path.DirectorySeparatorChar, _benchmarkProjectPathValues));
+
+            await _projectBuilder.BuildAsync(new Uri(buildPath, UriKind.Absolute));
+
+            var benchmarkBinaryPath = Path.Combine(clonePath.LocalPath,
+                string.Join(Path.DirectorySeparatorChar, _benchmarkBuildOutputBasePathValues));
 
             var (_, output) =
-                await _benchmarkExecutor.ExecuteAsync(new Uri(BenchmarkBuildOutputBasePath, UriKind.Absolute),
+                await _benchmarkExecutor.ExecuteAsync(new Uri(benchmarkBinaryPath, UriKind.Absolute),
                     BenchmarkAssemblyName,
                     benchmark);
 

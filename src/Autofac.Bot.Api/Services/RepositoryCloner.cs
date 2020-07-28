@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Autofac.Bot.Api.Enums;
 using Autofac.Bot.Api.Tools;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
@@ -16,9 +17,13 @@ namespace Autofac.Bot.Api.Services
             _logger = logger;
         }
         
-        public async Task<(bool succeeded, Uri outputUri)> CloneAsync(Uri repositoryUri)
+        public async Task<(bool succeeded, Uri outputUri)> CloneAync(Uri repositoryUri, RepositoryTarget target, string traceIdentifier)
         {
-            var clonePath = Path.Combine(AppContext.BaseDirectory, "Autofac");
+            var traceIdentifierPath = Path.Combine(AppContext.BaseDirectory, traceIdentifier);
+
+            if (!Directory.Exists(traceIdentifierPath)) Directory.CreateDirectory(traceIdentifierPath); 
+            
+            var clonePath = Path.Combine(traceIdentifierPath, target.ToString(), "Autofac");
             
             if (Directory.Exists(clonePath)) Directory.Delete(clonePath, true);
 

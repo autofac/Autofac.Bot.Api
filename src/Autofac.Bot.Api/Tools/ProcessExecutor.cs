@@ -29,11 +29,6 @@ namespace Autofac.Bot.Api.Tools
             {
                 return Result.Failure<string>(output);
             }
-            finally
-            {
-                process.Close();
-                process.Kill(true);
-            }
         }
     }
 }

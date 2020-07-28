@@ -17,21 +17,22 @@ namespace Autofac.Bot.Api.Services
             _logger = logger;
         }
 
-        public async Task<(bool succeeded, string output)> ExecuteAsync(Uri benchmarkBuildOutputUri, string assemblyName, string benchmarkName)
+        public async Task<(bool succeeded, string output)> ExecuteAsync(Uri benchmarkBinariesUri, string assemblyName,
+            string benchmarkName)
         {
-            var localBasePath = benchmarkBuildOutputUri.LocalPath;
+            var currentDirectory = Directory.GetCurrentDirectory();
 
-            var directories = Directory.EnumerateDirectories(localBasePath);
+            Directory.SetCurrentDirectory(benchmarkBinariesUri.LocalPath);
 
-            var targetFrameworkMonikerPath = directories.First()!;
-
-            var executeablePath = Path.Combine(targetFrameworkMonikerPath, assemblyName);
-            
-            var benchmarkProcess = ProcessFactory.Create("dotnet", $"{executeablePath} --filter *{benchmarkName}*");
+            var benchmarkProcess = ProcessFactory.Create("dotnet", $"{assemblyName} -i --filter *{benchmarkName}*");
 
             var (succeeded, _, benchmarkOutput, benchmarkError) = await ProcessExecutor.ExecuteAsync(benchmarkProcess);
-            
-            if (!succeeded) _logger.LogError("Failed to execute Benchmark. Error:{newLine}{error}}", Environment.NewLine, benchmarkError);
+
+            Directory.SetCurrentDirectory(currentDirectory);
+
+            if (!succeeded)
+                _logger.LogError("Failed to execute Benchmark. Error:{newLine}{error}}", Environment.NewLine,
+                    benchmarkError);
 
             return succeeded ? (true, benchmarkOutput) : (false, benchmarkError);
         }

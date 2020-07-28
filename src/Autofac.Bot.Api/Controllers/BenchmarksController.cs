@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac.Bot.Api.Enums;
 using Autofac.Bot.Api.Presentation;
@@ -16,14 +17,6 @@ namespace Autofac.Bot.Api.Controllers
     {
         private const string BenchmarkAssemblyName = "Autofac.Benchmarks.dll";
 
-        private readonly string[] _benchmarkBuildOutputBasePathValues =
-        {
-            "bench",
-            "Autofac.Benchmarks",
-            "bin",
-            "Release"
-        };
-
         private readonly BenchmarkExecutor _benchmarkExecutor;
 
         private readonly string[] _benchmarkProjectPathValues =
@@ -32,6 +25,13 @@ namespace Autofac.Bot.Api.Controllers
             "Autofac.Benchmarks",
             "Autofac.Benchmarks.csproj"
         };
+
+        private static readonly string FullOutputSummaryTemplateLeft =
+            $"{Environment.NewLine}{Environment.NewLine}<details>{Environment.NewLine}<summary>Complete benchmark output</summary>{Environment.NewLine}{Environment.NewLine}{Environment.NewLine}```text";
+
+        private static readonly string FullOutputSummaryTemplateRight =
+            $"```{Environment.NewLine}{Environment.NewLine}</details>{Environment.NewLine}{Environment.NewLine}";
+
 
         private readonly BranchLoader _branchLoader;
 
@@ -53,25 +53,28 @@ namespace Autofac.Bot.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> ExecuteAsync([FromBody] BenchmarkRequestDto benchmarkRequest)
         {
-            var summaryTarget =
+            var (summaryTarget, outputTarget) =
                 await ExecuteForTargetBranch(benchmarkRequest.TargetRepository, benchmarkRequest.Benchmark);
 
-            var summarySource =
+            var (summarySource, outputSource) =
                 await ExecuteForSourceBranch(benchmarkRequest.SourceRepository, benchmarkRequest.Benchmark);
 
-            var header = $"## {benchmarkRequest.Benchmark}{Environment.NewLine}{Environment.NewLine}";
-            var resultPartOne =
-                $"#### {benchmarkRequest.TargetRepository.Branch} (Target){Environment.NewLine}{summaryTarget}";
-            var resultPartTwo =
-                $"#### {benchmarkRequest.SourceRepository.Branch} (Source){Environment.NewLine}{summarySource}";
+            var header = $"### {benchmarkRequest.Benchmark}{Environment.NewLine}{Environment.NewLine}";
+            var targetResult =
+                $"#### {benchmarkRequest.TargetRepository.Branch} (Target){Environment.NewLine}{summaryTarget}{Environment.NewLine}{FullOutputSummaryTemplateLeft}{Environment.NewLine}{outputTarget}{Environment.NewLine}{FullOutputSummaryTemplateRight}";
+            var sourceResult =
+                $"#### {benchmarkRequest.SourceRepository.Branch} (Source){Environment.NewLine}{summarySource}{Environment.NewLine}{FullOutputSummaryTemplateLeft}{Environment.NewLine}{outputSource}{Environment.NewLine}{FullOutputSummaryTemplateRight}";
             var sep = $"{Environment.NewLine}{Environment.NewLine}";
 
-            return File(Encoding.UTF8.GetBytes($"{header}{resultPartOne}{sep}{resultPartTwo}"), "text/html");
+            var content = $"{header}{targetResult}{sep}{sourceResult}";
+
+            return File(Encoding.UTF8.GetBytes(content), "text/html");
         }
 
-        private async Task<string> ExecuteForSourceBranch(RepositoryDto repository, string benchmark)
+        private async Task<(string summarySource, string completeOutput)> ExecuteForSourceBranch(
+            RepositoryDto repository, string benchmark)
         {
-            var (_, clonePath) = await _cloner.CloneAync(new Uri(repository.Url, UriKind.Absolute),
+            var (_, cloneBasePath, clonePath) = await _cloner.CloneAync(new Uri(repository.Url, UriKind.Absolute),
                 RepositoryTarget.Source, Activity.Current.TraceId.ToHexString());
 
             await _branchLoader.LoadAsync(clonePath, repository.Branch);
@@ -79,24 +82,23 @@ namespace Autofac.Bot.Api.Controllers
             var buildPath = Path.Combine(clonePath.LocalPath,
                 string.Join(Path.DirectorySeparatorChar, _benchmarkProjectPathValues));
 
-            await _projectBuilder.BuildAsync(new Uri(buildPath, UriKind.Absolute));
-
-            var benchmarkBinaryPath = Path.Combine(clonePath.LocalPath,
-                string.Join(Path.DirectorySeparatorChar, _benchmarkBuildOutputBasePathValues));
+            var benchmarkBinariesUri =
+                await _projectBuilder.BuildAsync(new Uri(buildPath, UriKind.Absolute), cloneBasePath);
 
             var (_, output) =
-                await _benchmarkExecutor.ExecuteAsync(new Uri(benchmarkBinaryPath, UriKind.Absolute),
+                await _benchmarkExecutor.ExecuteAsync(benchmarkBinariesUri,
                     BenchmarkAssemblyName,
                     benchmark);
 
             var summary = _summaryExtractor.ExtractSummary(output);
 
-            return summary;
+            return (summary, output);
         }
 
-        private async Task<string> ExecuteForTargetBranch(RepositoryDto repository, string benchmark)
+        private async Task<(string summaryTarget, string completeOutput)> ExecuteForTargetBranch(
+            RepositoryDto repository, string benchmark)
         {
-            var (_, clonePath) = await _cloner.CloneAync(new Uri(repository.Url, UriKind.Absolute),
+            var (_, cloneBasePath, clonePath) = await _cloner.CloneAync(new Uri(repository.Url, UriKind.Absolute),
                 RepositoryTarget.Target, Activity.Current.TraceId.ToHexString());
 
             await _branchLoader.LoadAsync(clonePath, repository.Branch);
@@ -104,19 +106,17 @@ namespace Autofac.Bot.Api.Controllers
             var buildPath = Path.Combine(clonePath.LocalPath,
                 string.Join(Path.DirectorySeparatorChar, _benchmarkProjectPathValues));
 
-            await _projectBuilder.BuildAsync(new Uri(buildPath, UriKind.Absolute));
-
-            var benchmarkBinaryPath = Path.Combine(clonePath.LocalPath,
-                string.Join(Path.DirectorySeparatorChar, _benchmarkBuildOutputBasePathValues));
+            var benchmarkBinariesUri =
+                await _projectBuilder.BuildAsync(new Uri(buildPath, UriKind.Absolute), cloneBasePath);
 
             var (_, output) =
-                await _benchmarkExecutor.ExecuteAsync(new Uri(benchmarkBinaryPath, UriKind.Absolute),
+                await _benchmarkExecutor.ExecuteAsync(benchmarkBinariesUri,
                     BenchmarkAssemblyName,
                     benchmark);
 
             var summary = _summaryExtractor.ExtractSummary(output);
 
-            return summary;
+            return (summary, output);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Autofac.Bot.Api.Tools;
 using CSharpFunctionalExtensions;
@@ -15,16 +16,17 @@ namespace Autofac.Bot.Api.Services
             _logger = logger;
         }
 
-        public async Task<bool> BuildAsync(Uri projectUri)
+        public async Task<Uri> BuildAsync(Uri projectUri, Uri cloneBasePath)
         {
-            var process = ProcessFactory.Create("dotnet", $"build -c Release {projectUri.LocalPath}");
+            var publishPath = Path.Combine(cloneBasePath.LocalPath, "publish");
+            var process = ProcessFactory.Create("dotnet", $"publish -c Release {projectUri.LocalPath} -o {publishPath}");
 
             var (succeeded, _, _, buildError) = await ProcessExecutor.ExecuteAsync(process);
 
             if (!succeeded)
                 _logger.LogError("Failed to load branch. Error:{newLine}{error}}", Environment.NewLine, buildError);
 
-            return succeeded;
+            return new Uri(publishPath);
         }
     }
 }

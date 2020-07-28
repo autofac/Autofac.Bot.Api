@@ -16,28 +16,27 @@ namespace Autofac.Bot.Api.Services
         {
             _logger = logger;
         }
-        
-        public async Task<(bool succeeded, Uri outputUri)> CloneAync(Uri repositoryUri, RepositoryTarget target, string traceIdentifier)
+
+        public async Task<(bool succeeded, Uri cloneBasePath, Uri clonePath)> CloneAync(Uri repositoryUri,
+            RepositoryTarget target, string traceIdentifier)
         {
-            var traceIdentifierPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), traceIdentifier);
+            var cloneBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                traceIdentifier, target.ToString());
 
-            if (!Directory.Exists(traceIdentifierPath)) Directory.CreateDirectory(traceIdentifierPath); 
-            
-            var clonePath = Path.Combine(traceIdentifierPath, target.ToString(), "Autofac");
-            
-            if (Directory.Exists(clonePath)) Directory.Delete(clonePath, true);
-
-            Directory.CreateDirectory(clonePath);
+            var clonePath = Path.Combine(cloneBasePath, "src");
 
             var cloneProcess =
                 ProcessFactory.Create("git", $"clone {repositoryUri} {clonePath}");
-            
-            var (succeeded, _, _, cloneError) = await ProcessExecutor.ExecuteAsync(cloneProcess);
-            
-            if (!succeeded)
-                _logger.LogError("Failed to clone repository. Error:{newLine}{error}}", Environment.NewLine, cloneError);
 
-            return succeeded ? (true, new Uri(clonePath, UriKind.Absolute)) : (false, null);
+            var (succeeded, _, _, cloneError) = await ProcessExecutor.ExecuteAsync(cloneProcess);
+
+            if (!succeeded)
+                _logger.LogError("Failed to clone repository. Error:{newLine}{error}}", Environment.NewLine,
+                    cloneError);
+
+            return succeeded
+                ? (true, new Uri(cloneBasePath, UriKind.Absolute), new Uri(clonePath, UriKind.Absolute))
+                : (false, null, null);
         }
     }
 }

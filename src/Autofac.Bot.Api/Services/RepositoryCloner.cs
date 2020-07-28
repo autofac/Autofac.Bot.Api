@@ -19,7 +19,7 @@ namespace Autofac.Bot.Api.Services
         
         public async Task<(bool succeeded, Uri outputUri)> CloneAync(Uri repositoryUri, RepositoryTarget target, string traceIdentifier)
         {
-            var traceIdentifierPath = Path.Combine(AppContext.BaseDirectory, traceIdentifier);
+            var traceIdentifierPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), traceIdentifier);
 
             if (!Directory.Exists(traceIdentifierPath)) Directory.CreateDirectory(traceIdentifierPath); 
             

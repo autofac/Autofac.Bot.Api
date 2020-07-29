@@ -7,11 +7,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Autofac.Bot.Api.Services
 {
-    public class ProjectBuilder
+    public class ProjectPublisher
     {
-        private readonly ILogger<ProjectBuilder> _logger;
+        private readonly ILogger<ProjectPublisher> _logger;
 
-        public ProjectBuilder(ILogger<ProjectBuilder> logger)
+        public ProjectPublisher(ILogger<ProjectPublisher> logger)
         {
             _logger = logger;
         }

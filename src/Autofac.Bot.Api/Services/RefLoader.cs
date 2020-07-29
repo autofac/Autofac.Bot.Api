@@ -25,10 +25,10 @@ namespace Autofac.Bot.Api.Services
             Directory.SetCurrentDirectory(repositoryPath.LocalPath);
 
             if (branchName.StartsWith("commit:", StringComparison.InvariantCultureIgnoreCase) ||
-                branchName.StartsWith("tag:"))
+                branchName.StartsWith("tag:", StringComparison.InvariantCultureIgnoreCase))
             {
-                var safeBranchName = branchName.ToLowerInvariant().Replace("commit:", "").Replace("tag:", "");
-                var commitCheckedOut = await TryCommitHashCheckoutAsync(safeBranchName);
+                var @ref = branchName.ToLowerInvariant().Replace("commit:", "", StringComparison.InvariantCultureIgnoreCase).Replace("tag:", "", StringComparison.InvariantCultureIgnoreCase);
+                var commitCheckedOut = await TryCommitHashCheckoutAsync(@ref);
                 Directory.SetCurrentDirectory(currentDirectory);
                 return commitCheckedOut;
             }

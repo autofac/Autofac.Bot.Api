@@ -1,3 +1,4 @@
+using Autofac.Bot.Api.Filter;
 using Autofac.Bot.Api.Services;
 using Autofac.Bot.Api.UseCases.Commands;
 using Microsoft.AspNetCore.Builder;
@@ -10,7 +11,9 @@ namespace Autofac.Bot.Api
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services
+                .AddControllers(options => options.Filters.Add<UnhandledExceptionFilter>())
+                .AddJsonOptions(options => options.JsonSerializerOptions.IgnoreNullValues = true);
             services.AddScoped<ExecuteBenchmarkCommandHandler>();
             services.AddScoped<RepositoryCloner>();
             services.AddScoped<BenchmarkRunner>();

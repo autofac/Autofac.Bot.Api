@@ -1,4 +1,3 @@
-using System;
 using Autofac.Bot.Api.UseCases.Abstractions.Models;
 
 namespace Autofac.Bot.Api.Services.Results

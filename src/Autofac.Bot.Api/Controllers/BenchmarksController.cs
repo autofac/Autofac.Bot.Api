@@ -1,12 +1,5 @@
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using Autofac.Bot.Api.Enums;
 using Autofac.Bot.Api.Presentation;
-using Autofac.Bot.Api.Services;
 using Autofac.Bot.Api.UseCases.Abstractions.Commands;
 using Autofac.Bot.Api.UseCases.Abstractions.Models;
 using Autofac.Bot.Api.UseCases.Commands;
@@ -24,8 +17,8 @@ namespace Autofac.Bot.Api.Controllers
             [FromBody] BenchmarkRequestDto benchmarkRequest)
         {
             var command = new ExecuteBenchmarkCommand(benchmarkRequest.Benchmark,
-                new Repository(benchmarkRequest.TargetRepository.Branch, benchmarkRequest.TargetRepository.Url),
-                new Repository(benchmarkRequest.SourceRepository.Branch, benchmarkRequest.SourceRepository.Url));
+                new Repository(benchmarkRequest.TargetRepository.Ref, benchmarkRequest.TargetRepository.Url),
+                new Repository(benchmarkRequest.SourceRepository.Ref, benchmarkRequest.SourceRepository.Url));
 
             var benchmarkOutputContent = await benchmarkCommandHandler.ExecuteAsync(command);
 

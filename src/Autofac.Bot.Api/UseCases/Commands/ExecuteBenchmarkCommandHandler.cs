@@ -50,7 +50,6 @@ namespace Autofac.Bot.Api.UseCases.Commands
             var sourceExecutionResult =
                 await ExecuteForSourceBranch(command.SourceRepository, command.Benchmark);
 
-
             return Encoding.UTF8.GetBytes(_markdownGenerator.Generate(targetExecutionResult, sourceExecutionResult,
                 command.Benchmark));
         }
@@ -73,6 +72,8 @@ namespace Autofac.Bot.Api.UseCases.Commands
                 await _benchmarkRunner.RunAsync(publishResult.PublishUri!,
                     BenchmarkAssemblyName,
                     benchmark);
+            
+            if (Directory.Exists(cloneResult.CloneBasePath!.LocalPath)) Directory.Delete(cloneResult.CloneBasePath!.LocalPath, true);
 
             var summary = _summaryExtractor.ExtractSummary(benchmarkRunnerResult.Output);
 
@@ -97,6 +98,8 @@ namespace Autofac.Bot.Api.UseCases.Commands
                 await _benchmarkRunner.RunAsync(publishResult.PublishUri!,
                     BenchmarkAssemblyName,
                     benchmark);
+            
+            if (Directory.Exists(cloneResult.CloneBasePath!.LocalPath)) Directory.Delete(cloneResult.CloneBasePath!.LocalPath, true);
 
             var summary = _summaryExtractor.ExtractSummary(benchmarkRunnerResult.Output);
 

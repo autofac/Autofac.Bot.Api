@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Autofac.Bot.Api.Services.Results;
 using Autofac.Bot.Api.Tools;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
@@ -16,17 +17,21 @@ namespace Autofac.Bot.Api.Services
             _logger = logger;
         }
 
-        public async Task<Uri> BuildAsync(Uri projectUri, Uri cloneBasePath)
+        public async Task<ProjectPublishResult> PublishAsync(Uri projectUri, Uri cloneBasePath)
         {
             var publishPath = Path.Combine(cloneBasePath.LocalPath, "publish");
-            var process = ProcessFactory.Create("dotnet", $"publish -c Release {projectUri.LocalPath} -o {publishPath}");
 
-            var (succeeded, _, _, buildError) = await ProcessExecutor.ExecuteAsync(process);
+            var process =
+                ProcessFactory.Create("dotnet", $"publish -c Release {projectUri.LocalPath} -o {publishPath}");
+
+            var (succeeded, _, _, publishError) = await ProcessExecutor.ExecuteAsync(process);
 
             if (!succeeded)
-                _logger.LogError("Failed to load branch. Error:{newLine}{error}}", Environment.NewLine, buildError);
+                _logger.LogError("Failed to load branch. Error:{newLine}{error}}", Environment.NewLine, publishError);
 
-            return new Uri(publishPath);
+            return succeeded
+                ? new ProjectPublishResult(true, new Uri(publishPath))
+                : new ProjectPublishResult(false, publishError);
         }
     }
 }

@@ -5,14 +5,14 @@ namespace Autofac.Bot.Api.Services
     public class SummaryExtractor
     {
         // ReSharper disable once MemberCanBeMadeStatic.Global
-        public string ExtractSummary(string benchmarkResult)
+        public string ExtractSummary(string benchmarkOutput)
         {
             var indexOfSummary =
-                benchmarkResult.LastIndexOf("// * Summary *", StringComparison.InvariantCultureIgnoreCase);
+                benchmarkOutput.LastIndexOf("// * Summary *", StringComparison.InvariantCultureIgnoreCase);
 
-            if (indexOfSummary == -1) return benchmarkResult;
+            if (indexOfSummary == -1) return benchmarkOutput;
 
-            var summary = benchmarkResult.Substring(indexOfSummary, benchmarkResult.Length - indexOfSummary);
+            var summary = benchmarkOutput.Substring(indexOfSummary, benchmarkOutput.Length - indexOfSummary);
 
             var firstIndexOfPipe = summary.IndexOf("|", StringComparison.InvariantCultureIgnoreCase);
 

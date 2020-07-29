@@ -1,12 +1,14 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Autofac.Bot.Api.Presentation
 {
     public class BenchmarkRequestDto
     {
-        public string Benchmark { get; set; }
-        
-        public RepositoryDto TargetRepository { get; set; }
-        
-        public RepositoryDto SourceRepository { get; set; }
+        public string Benchmark { get; set; } = null!;
+
+        public RepositoryDto TargetRepository { get; set; } = null!;
+
+        public RepositoryDto SourceRepository { get; set; } = null!;
     }
 }

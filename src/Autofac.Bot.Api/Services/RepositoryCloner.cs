@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Autofac.Bot.Api.Enums;
+using Autofac.Bot.Api.Services.Results;
 using Autofac.Bot.Api.Tools;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
@@ -17,7 +18,7 @@ namespace Autofac.Bot.Api.Services
             _logger = logger;
         }
 
-        public async Task<(bool succeeded, Uri cloneBasePath, Uri clonePath)> CloneAync(Uri repositoryUri,
+        public async Task<RepositoryCloneResult> CloneAync(Uri repositoryUri,
             RepositoryTarget target, string traceIdentifier)
         {
             var cloneBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
@@ -35,8 +36,8 @@ namespace Autofac.Bot.Api.Services
                     cloneError);
 
             return succeeded
-                ? (true, new Uri(cloneBasePath, UriKind.Absolute), new Uri(clonePath, UriKind.Absolute))
-                : (false, null, null);
+                ? new RepositoryCloneResult(true, new Uri(cloneBasePath), new Uri(clonePath))
+                : new RepositoryCloneResult(false, cloneError);
         }
     }
 }

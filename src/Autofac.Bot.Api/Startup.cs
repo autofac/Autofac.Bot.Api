@@ -1,4 +1,5 @@
 using Autofac.Bot.Api.Services;
+using Autofac.Bot.Api.UseCases.Commands;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,11 +11,13 @@ namespace Autofac.Bot.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<ExecuteBenchmarkCommandHandler>();
             services.AddScoped<RepositoryCloner>();
-            services.AddScoped<BenchmarkExecutor>();
-            services.AddScoped<BranchLoader>();
-            services.AddScoped<ProjectBuilder>();
+            services.AddScoped<BenchmarkRunner>();
+            services.AddScoped<RefLoader>();
+            services.AddScoped<ProjectPublisher>();
             services.AddScoped<SummaryExtractor>();
+            services.AddScoped<MarkdownGenerator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -23,10 +26,7 @@ namespace Autofac.Bot.Api
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

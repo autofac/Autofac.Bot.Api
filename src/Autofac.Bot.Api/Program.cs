@@ -19,7 +19,7 @@ namespace Autofac.Bot.Api
                 .UseContentRoot(AppContext.BaseDirectory)
                 .UseSerilog(ConfigureLogger)
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
-        
+
         private static void ConfigureLogger(HostBuilderContext context, LoggerConfiguration loggerConfiguration)
         {
             loggerConfiguration.ReadFrom.Configuration(context.Configuration);

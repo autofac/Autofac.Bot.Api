@@ -1,11 +1,13 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 namespace Autofac.Bot.Api.Presentation
 {
-    // ReSharper disable once ClassNeverInstantiated.Global
     public class RepositoryDto
     {
-        public string Branch { get; set; }
-        
-        public string Url { get; set; }
+        public string Branch { get; set; } = null!;
+
+        public string Url { get; set; } = null!;
     }
 }

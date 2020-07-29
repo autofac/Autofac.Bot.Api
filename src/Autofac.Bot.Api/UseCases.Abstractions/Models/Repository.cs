@@ -1,14 +1,14 @@
 namespace Autofac.Bot.Api.UseCases.Abstractions.Models
 {
-    public class RepositoryModel
+    public class Repository
     {
-        public string Branch { get; }
-        
+        public string Ref { get; }
+
         public string Url { get; }
 
-        public RepositoryModel(string branch, string url)
+        public Repository(string @ref, string url)
         {
-            Branch = branch;
+            Ref = @ref;
             Url = url;
         }
     }

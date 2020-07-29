@@ -22,6 +22,7 @@ namespace Autofac.Bot.Api.Services
             RepositoryTarget target, string traceIdentifier)
         {
             var cloneBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                ".autofacbot",
                 traceIdentifier, target.ToString());
 
             var clonePath = Path.Combine(cloneBasePath, "src");

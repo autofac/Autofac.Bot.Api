@@ -8,6 +8,7 @@ using Autofac.Bot.Api.Services;
 using Autofac.Bot.Api.Services.Results;
 using Autofac.Bot.Api.UseCases.Abstractions.Commands;
 using Autofac.Bot.Api.UseCases.Abstractions.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Autofac.Bot.Api.UseCases.Commands
 {
@@ -29,10 +30,11 @@ namespace Autofac.Bot.Api.UseCases.Commands
         private readonly ProjectPublisher _projectPublisher;
         private readonly SummaryExtractor _summaryExtractor;
         private readonly MarkdownGenerator _markdownGenerator;
+        private readonly ILogger<ExecuteBenchmarkCommandHandler> _logger;
 
         public ExecuteBenchmarkCommandHandler(RefLoader refLoader, BenchmarkRunner benchmarkRunner,
             RepositoryCloner cloner, ProjectPublisher projectPublisher, SummaryExtractor summaryExtractor,
-            MarkdownGenerator markdownGenerator)
+            MarkdownGenerator markdownGenerator, ILogger<ExecuteBenchmarkCommandHandler> logger)
         {
             _refLoader = refLoader;
             _benchmarkRunner = benchmarkRunner;
@@ -40,6 +42,7 @@ namespace Autofac.Bot.Api.UseCases.Commands
             _projectPublisher = projectPublisher;
             _summaryExtractor = summaryExtractor;
             _markdownGenerator = markdownGenerator;
+            _logger = logger;
         }
 
         public async Task<byte[]> ExecuteAsync(ExecuteBenchmarkCommand command)
@@ -73,7 +76,7 @@ namespace Autofac.Bot.Api.UseCases.Commands
                     BenchmarkAssemblyName,
                     benchmark);
             
-            if (Directory.Exists(cloneResult.CloneBasePath!.LocalPath)) Directory.Delete(cloneResult.CloneBasePath!.LocalPath, true);
+            SafeDeleteDirectory(cloneResult.CloneBasePath!);
 
             var summary = _summaryExtractor.ExtractSummary(benchmarkRunnerResult.Output);
 
@@ -99,11 +102,23 @@ namespace Autofac.Bot.Api.UseCases.Commands
                     BenchmarkAssemblyName,
                     benchmark);
             
-            if (Directory.Exists(cloneResult.CloneBasePath!.LocalPath)) Directory.Delete(cloneResult.CloneBasePath!.LocalPath, true);
+            SafeDeleteDirectory(cloneResult.CloneBasePath!);
 
             var summary = _summaryExtractor.ExtractSummary(benchmarkRunnerResult.Output);
 
             return new ExecutionResult(repository, summary, benchmarkRunnerResult.Output);
+        }
+
+        private void SafeDeleteDirectory(Uri directoryUri)
+        {
+            try
+            {
+                if (Directory.Exists(directoryUri.LocalPath)) Directory.Delete(directoryUri.LocalPath, true);
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning(e, "Failed to delete directory");
+            }
         }
     }
 }

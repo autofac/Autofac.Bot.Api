@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Autofac.Bot.Api.Services.Results;
-using Autofac.Bot.Api.Tools;
+using Autofac.Bot.Api.Services.Models;
+using Autofac.Bot.Api.Services.Tools;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 

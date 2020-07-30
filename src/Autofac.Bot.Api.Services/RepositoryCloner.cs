@@ -1,9 +1,8 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Autofac.Bot.Api.Enums;
-using Autofac.Bot.Api.Services.Results;
-using Autofac.Bot.Api.Tools;
+using Autofac.Bot.Api.Services.Models;
+using Autofac.Bot.Api.Services.Tools;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 
@@ -19,7 +18,7 @@ namespace Autofac.Bot.Api.Services
         }
 
         public async Task<RepositoryCloneResult> CloneAync(Uri repositoryUri,
-            RepositoryTarget target, string traceIdentifier)
+            string target, string traceIdentifier)
         {
             var cloneBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 ".autofacbot",

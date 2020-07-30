@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Autofac.Bot.Api.Services.Results;
-using Autofac.Bot.Api.Tools;
+using Autofac.Bot.Api.Services.Models;
+using Autofac.Bot.Api.Services.Tools;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 
@@ -27,7 +27,9 @@ namespace Autofac.Bot.Api.Services
             if (branchName.StartsWith("commit:", StringComparison.InvariantCultureIgnoreCase) ||
                 branchName.StartsWith("tag:", StringComparison.InvariantCultureIgnoreCase))
             {
-                var @ref = branchName.ToLowerInvariant().Replace("commit:", "", StringComparison.InvariantCultureIgnoreCase).Replace("tag:", "", StringComparison.InvariantCultureIgnoreCase);
+                var @ref = branchName.ToLowerInvariant()
+                    .Replace("commit:", "", StringComparison.InvariantCultureIgnoreCase)
+                    .Replace("tag:", "", StringComparison.InvariantCultureIgnoreCase);
                 var commitCheckedOut = await TryCommitHashCheckoutAsync(@ref);
                 Directory.SetCurrentDirectory(currentDirectory);
                 return commitCheckedOut;

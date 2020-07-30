@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace Autofac.Bot.Api.Tools
+namespace Autofac.Bot.Api.Services.Tools
 {
-    public static class ProcessFactory
+    internal static class ProcessFactory
     {
         public static ProcessStartInfo Create(string executableName, string args)
         {

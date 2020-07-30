@@ -1,6 +1,6 @@
 using System;
 
-namespace Autofac.Bot.Api.Services.Results
+namespace Autofac.Bot.Api.Services.Models
 {
     public class RepositoryCloneResult
     {

@@ -1,4 +1,4 @@
-namespace Autofac.Bot.Api.Enums
+namespace Autofac.Bot.Api.UseCases.Abstractions.Enums
 {
     public enum RepositoryTarget
     {

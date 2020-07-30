@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Autofac.Bot.Api.Services\Autofac.Bot.Api.Services.csproj" />
+      <ProjectReference Include="..\Autofac.Bot.Api.UseCases.Abstractions\Autofac.Bot.Api.UseCases.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>

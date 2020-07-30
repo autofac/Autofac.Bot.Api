@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 
-namespace Autofac.Bot.Api.Tools
+namespace Autofac.Bot.Api.Services.Tools
 {
-    public static class ProcessExecutor
+    internal static class ProcessExecutor
     {
         public static async Task<Result<string>> ExecuteAsync(ProcessStartInfo processStartInfo)
         {

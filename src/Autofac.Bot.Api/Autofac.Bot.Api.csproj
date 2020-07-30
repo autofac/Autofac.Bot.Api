@@ -2,14 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Nullable>Enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CSharpFunctionalExtensions" Version="2.11.1" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="5.2.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.6" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="3.1.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Autofac.Bot.Api.Controllers\Autofac.Bot.Api.Controllers.csproj" />
+    <ProjectReference Include="..\Autofac.Bot.Api.Services\Autofac.Bot.Api.Services.csproj" />
+    <ProjectReference Include="..\Autofac.Bot.Api.UseCases.Abstractions\Autofac.Bot.Api.UseCases.Abstractions.csproj" />
+    <ProjectReference Include="..\Autofac.Bot.Api.UseCases\Autofac.Bot.Api.UseCases.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers" />
   </ItemGroup>
 
 

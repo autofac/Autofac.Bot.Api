@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using Autofac.Bot.Api.UseCases.Abstractions;
 using Autofac.Bot.Api.UseCases.Abstractions.Models;
 
 namespace Autofac.Bot.Api.Controllers.Services

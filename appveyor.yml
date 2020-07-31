@@ -1,0 +1,26 @@
+image: Ubuntu
+
+version: '1.0.0.{build}'
+
+dotnet_csproj:
+  version_prefix: '1.0.0'
+  patch: true
+  file: 'src\**\*.csproj'
+
+configuration: Release
+
+environment:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  NUGET_XMLDOC_MODE: skip
+
+skip_tags: true
+
+nuget:
+  disable_publish_on_pr: true
+
+clone_depth: 1
+
+test: off
+
+build_script:
+  - pwsh: .\build.ps1

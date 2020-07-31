@@ -29,6 +29,7 @@ namespace Autofac.Bot.Api.Controllers.Tests
         {
             const string childScopeBenchmark = "ChildScopeResolveBenchmark";
             var client = _webApplicationFactoryFixture.Server.CreateClient();
+            client.Timeout = TimeSpan.FromMinutes(5);
             var request = new BenchmarkRequestDto(childScopeBenchmark, new RepositoryDto("develop", AutofacRepoUrl),
                 new RepositoryDto("develop", AutofacRepoUrl));
             var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, JsonMediaType);

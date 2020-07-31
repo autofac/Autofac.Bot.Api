@@ -1,6 +1,5 @@
 using Autofac.Bot.Api.Filter;
 using Autofac.Bot.Api.Services;
-using Autofac.Bot.Api.UseCases.Abstractions.Exceptions;
 using Autofac.Bot.Api.UseCases.Commands;
 using MediatR.Extensions.Autofac.DependencyInjection;
 using Microsoft.AspNetCore.Builder;

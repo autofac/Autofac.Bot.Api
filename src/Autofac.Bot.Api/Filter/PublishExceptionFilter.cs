@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using Autofac.Bot.Api.UseCases.Abstractions.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac.Bot.Api.Services;
-using Autofac.Bot.Api.UseCases.Abstractions;
 using Autofac.Bot.Api.UseCases.Abstractions.Commands;
 using Autofac.Bot.Api.UseCases.Abstractions.Exceptions;
 using Autofac.Bot.Api.UseCases.Abstractions.Models;

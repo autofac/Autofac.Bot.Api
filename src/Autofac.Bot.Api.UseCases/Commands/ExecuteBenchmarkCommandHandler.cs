@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Autofac.Bot.Api.Services;
 using Autofac.Bot.Api.UseCases.Abstractions;
 using Autofac.Bot.Api.UseCases.Abstractions.Commands;
+using Autofac.Bot.Api.UseCases.Abstractions.Exceptions;
+using Autofac.Bot.Api.UseCases.Abstractions.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -49,25 +51,43 @@ namespace Autofac.Bot.Api.UseCases.Commands
             var cloneResult = await _cloner.CloneAync(new Uri(request.Repository.Url),
                 request.RepositoryTarget.ToString(), Activity.Current.TraceId.ToHexString());
 
-            await _refLoader.LoadAsync(cloneResult.ClonePath!, request.Repository.Ref);
+            if (!cloneResult.Succeeded)
+            {
+                throw new RepositoryCloneException($"Failed to clone repository with  URL: {request.Repository.Url}",
+                    cloneResult.Error!);
+            }
 
-            var buildPath = Path.Combine(cloneResult.ClonePath!.LocalPath,
+            var refLoadResult = await _refLoader.LoadAsync(cloneResult.ClonePath!, request.Repository.Ref);
+
+            if (!refLoadResult.Succeeded)
+            {
+                throw new RefLoadException(
+                    $"Failed to checkout ref: {request.Repository.Ref} for URL: {request.Repository.Url}",
+                    refLoadResult.Error!);
+            }
+
+            var publishPath = Path.Combine(cloneResult.ClonePath!.LocalPath,
                 string.Join(Path.DirectorySeparatorChar, _benchmarkProjectPathValues));
 
             var publishResult =
-                await _projectPublisher.PublishAsync(new Uri(buildPath), cloneResult.CloneBasePath!);
+                await _projectPublisher.PublishAsync(new Uri(publishPath), cloneResult.CloneBasePath!);
 
-            var benchmarkRunnerResult =
+            if (!publishResult.Succeeded)
+            {
+                throw new PublishException("Failed to publish project", publishResult.Error!);
+            }
+
+            var benchmarkOutput =
                 await _benchmarkRunner.RunAsync(publishResult.PublishUri!,
                     BenchmarkAssemblyName,
                     request.Benchmark);
 
             SafeDeleteDirectory(cloneResult.CloneBasePath!);
 
-            var summary = _summaryExtractor.ExtractSummary(benchmarkRunnerResult.Output);
+            var summary = _summaryExtractor.ExtractSummary(benchmarkOutput);
 
             return new BenchmarkResult(request.Repository, request.RepositoryTarget, summary,
-                benchmarkRunnerResult.Output);
+                benchmarkOutput);
         }
 
         private void SafeDeleteDirectory(Uri cloneBasePath)

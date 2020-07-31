@@ -20,9 +20,5 @@
     <ProjectReference Include="..\Autofac.Bot.Api.UseCases\Autofac.Bot.Api.UseCases.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers" />
-  </ItemGroup>
-
 
 </Project>

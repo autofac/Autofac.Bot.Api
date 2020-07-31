@@ -1,7 +1,6 @@
 using Autofac.Bot.Api.UseCases.Abstractions.Enums;
-using Autofac.Bot.Api.UseCases.Abstractions.Models;
 
-namespace Autofac.Bot.Api.UseCases.Abstractions
+namespace Autofac.Bot.Api.UseCases.Abstractions.Models
 {
     public class BenchmarkResult
     {

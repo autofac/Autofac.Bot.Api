@@ -1,5 +1,6 @@
 using Autofac.Bot.Api.Filter;
 using Autofac.Bot.Api.Services;
+using Autofac.Bot.Api.UseCases.Abstractions.Exceptions;
 using Autofac.Bot.Api.UseCases.Commands;
 using MediatR.Extensions.Autofac.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
@@ -13,7 +14,18 @@ namespace Autofac.Bot.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddControllers(options => options.Filters.Add<UnhandledExceptionFilter>())
+                .AddControllers(options =>
+                    {
+                        options.Filters
+                            .Add<UnhandledExceptionFilter>();
+                        options.Filters
+                            .Add<RepositoryCloneExceptionFilter>();
+                        options.Filters
+                            .Add<RefLoadExceptionFilter>();
+                        options.Filters
+                            .Add<PublishExceptionFilter>();
+                    }
+                )
                 .AddJsonOptions(options => options.JsonSerializerOptions.IgnoreNullValues = true);
         }
 

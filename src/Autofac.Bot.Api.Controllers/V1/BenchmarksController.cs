@@ -15,7 +15,7 @@ namespace Autofac.Bot.Api.Controllers.v1
     public class BenchmarksController : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> ExecuteAsync(
+        public async Task<IActionResult> ExecuteBenchmarkAsync(
             [FromServices] IMediator mediator,
             [FromBody] BenchmarkRequestDto benchmarkRequest)
         {

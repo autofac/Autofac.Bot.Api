@@ -16,7 +16,7 @@ namespace Autofac.Bot.Api.Services
             _logger = logger;
         }
 
-        public async Task<string> RunAsync(Uri benchmarkBinariesUri, string assemblyName,
+        public async Task<(string output, bool succeeded)> RunAsync(Uri benchmarkBinariesUri, string assemblyName,
             string benchmarkName)
         {
             var currentDirectory = Directory.GetCurrentDirectory();
@@ -33,7 +33,7 @@ namespace Autofac.Bot.Api.Services
                 _logger.LogError("Failed to execute Benchmark. Error:{newLine}{error}}", Environment.NewLine,
                     benchmarkError);
 
-            return succeeded ? benchmarkOutput : benchmarkError;
+            return succeeded ? (benchmarkOutput, succeeded) : (benchmarkError, succeeded);
         }
     }
 }

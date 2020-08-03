@@ -12,6 +12,8 @@ namespace Autofac.Bot.Api.Controllers.Services
         private static readonly string FullOutputSummaryTemplateRight =
             $"```{Environment.NewLine}{Environment.NewLine}</details>{Environment.NewLine}{Environment.NewLine}";
 
+        private const string BenchmarkFailed = "Benchmark failed. Please check the output for more details.";
+
         public static string Generate(string benchmark, params BenchmarkResult[] benchmarkResults)
         {
             var builder = new StringBuilder();
@@ -22,7 +24,7 @@ namespace Autofac.Bot.Api.Controllers.Services
                 var benchmarkResult = benchmarkResults[i];
 
                 builder.AppendLine(
-                    $"#### {benchmarkResult.RepositoryTarget.ToString()}: {GenerateMarkdownUrl(benchmarkResult.Repository)}{Environment.NewLine}{benchmarkResult.Summary}{Environment.NewLine}{FullOutputSummaryTemplateLeft}{Environment.NewLine}{benchmarkResult.Output}{Environment.NewLine}{FullOutputSummaryTemplateRight}");
+                    $"#### {benchmarkResult.RepositoryTarget.ToString()}: {GenerateMarkdownUrl(benchmarkResult.Repository)}{Environment.NewLine}{(benchmarkResult.Succeeded ? benchmarkResult.Summary : BenchmarkFailed)}{Environment.NewLine}{FullOutputSummaryTemplateLeft}{Environment.NewLine}{benchmarkResult.Output}{Environment.NewLine}{FullOutputSummaryTemplateRight}");
 
                 if (i == benchmarkResults.Length - 1) break;
 

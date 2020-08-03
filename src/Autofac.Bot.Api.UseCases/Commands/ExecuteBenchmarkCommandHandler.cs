@@ -24,12 +24,13 @@ namespace Autofac.Bot.Api.UseCases.Commands
             "Autofac.Benchmarks.csproj"
         };
 
-        private readonly RefLoader _refLoader;
         private readonly BenchmarkRunner _benchmarkRunner;
         private readonly RepositoryCloner _cloner;
-        private readonly ProjectPublisher _projectPublisher;
-        private readonly SummaryExtractor _summaryExtractor;
         private readonly ILogger<ExecuteBenchmarkCommandHandler> _logger;
+        private readonly ProjectPublisher _projectPublisher;
+
+        private readonly RefLoader _refLoader;
+        private readonly SummaryExtractor _summaryExtractor;
 
 
         public ExecuteBenchmarkCommandHandler(RefLoader refLoader, BenchmarkRunner benchmarkRunner,
@@ -51,19 +52,15 @@ namespace Autofac.Bot.Api.UseCases.Commands
                 request.RepositoryTarget.ToString(), Activity.Current.TraceId.ToHexString());
 
             if (!cloneResult.Succeeded)
-            {
                 throw new RepositoryCloneException($"Failed to clone repository with  URL: {request.Repository.Url}",
                     cloneResult.Error!);
-            }
 
             var refLoadResult = await _refLoader.LoadAsync(cloneResult.ClonePath!, request.Repository.Ref);
 
             if (!refLoadResult.Succeeded)
-            {
                 throw new RefLoadException(
                     $"Failed to checkout ref: {request.Repository.Ref} for URL: {request.Repository.Url}",
                     refLoadResult.Error!);
-            }
 
             var publishPath = Path.Combine(cloneResult.ClonePath!.LocalPath,
                 string.Join(Path.DirectorySeparatorChar, _benchmarkProjectPathValues));
@@ -71,22 +68,18 @@ namespace Autofac.Bot.Api.UseCases.Commands
             var publishResult =
                 await _projectPublisher.PublishAsync(new Uri(publishPath), cloneResult.CloneBasePath!);
 
-            if (!publishResult.Succeeded)
-            {
-                throw new PublishException("Failed to publish project", publishResult.Error!);
-            }
+            if (!publishResult.Succeeded) throw new PublishException("Failed to publish project", publishResult.Error!);
 
-            var benchmarkOutput =
+            var (output, succeeded) =
                 await _benchmarkRunner.RunAsync(publishResult.PublishUri!,
                     BenchmarkAssemblyName,
                     request.Benchmark);
 
             SafeDeleteDirectory(cloneResult.CloneBasePath!);
 
-            var summary = _summaryExtractor.ExtractSummary(benchmarkOutput);
+            var summary = _summaryExtractor.ExtractSummary(output);
 
-            return new BenchmarkResult(request.Repository, request.RepositoryTarget, summary,
-                benchmarkOutput);
+            return new BenchmarkResult(request.Repository, request.RepositoryTarget, succeeded, summary, output);
         }
 
         private void SafeDeleteDirectory(Uri cloneBasePath)

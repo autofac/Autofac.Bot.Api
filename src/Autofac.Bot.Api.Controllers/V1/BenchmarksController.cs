@@ -31,9 +31,9 @@ namespace Autofac.Bot.Api.Controllers.v1
 
             var sourceResult = await mediator.Send(sourceExecutionCommand);
 
-            var bytes = MarkdownGenerator.Generate(benchmarkRequest.Benchmark, targetResult, sourceResult);
+            var markdown = MarkdownGenerator.Generate(benchmarkRequest.Benchmark, benchmarkRequest.Verbose, targetResult, sourceResult);
 
-            return File(Encoding.UTF8.GetBytes(bytes), "text/html");
+            return File(Encoding.UTF8.GetBytes(markdown), "text/html");
         }
     }
 }

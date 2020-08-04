@@ -14,7 +14,7 @@ namespace Autofac.Bot.Api.Controllers.Services
 
         private const string BenchmarkFailed = "Benchmark failed. Please check the output for more details.";
 
-        public static string Generate(string benchmark, params BenchmarkResult[] benchmarkResults)
+        public static string Generate(string benchmark, bool verbose, params BenchmarkResult[] benchmarkResults)
         {
             var builder = new StringBuilder();
             builder.AppendLine($"### {benchmark}{Environment.NewLine}{Environment.NewLine}");
@@ -24,7 +24,13 @@ namespace Autofac.Bot.Api.Controllers.Services
                 var benchmarkResult = benchmarkResults[i];
 
                 builder.AppendLine(
-                    $"#### {benchmarkResult.RepositoryTarget.ToString()}: {GenerateMarkdownUrl(benchmarkResult.Repository)}{Environment.NewLine}{(benchmarkResult.Succeeded ? benchmarkResult.Summary : BenchmarkFailed)}{Environment.NewLine}{FullOutputSummaryTemplateLeft}{Environment.NewLine}{benchmarkResult.Output}{Environment.NewLine}{FullOutputSummaryTemplateRight}");
+                    $"#### {benchmarkResult.RepositoryTarget.ToString()}: {GenerateMarkdownUrl(benchmarkResult.Repository)}{Environment.NewLine}{(benchmarkResult.Succeeded ? benchmarkResult.Summary : BenchmarkFailed)}");
+
+                if (!benchmarkResult.Succeeded || verbose)
+                {
+                    builder.Append(
+                        $"{Environment.NewLine}{FullOutputSummaryTemplateLeft}{Environment.NewLine}{benchmarkResult.Output}{Environment.NewLine}{FullOutputSummaryTemplateRight}");
+                }
 
                 if (i == benchmarkResults.Length - 1) break;
 

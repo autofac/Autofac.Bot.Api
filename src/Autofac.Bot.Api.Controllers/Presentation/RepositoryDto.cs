@@ -2,6 +2,7 @@
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable MemberCanBePrivate.Global
+
 namespace Autofac.Bot.Api.Controllers.Presentation
 {
     public class RepositoryDto
@@ -15,9 +16,8 @@ namespace Autofac.Bot.Api.Controllers.Presentation
         // ReSharper disable once UnusedMember.Local
         private RepositoryDto()
         {
-            
         }
-        
+
         public string Ref { get; set; } = null!;
 
         public string Url { get; set; } = null!;

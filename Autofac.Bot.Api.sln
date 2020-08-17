@@ -42,6 +42,8 @@ ProjectSection(SolutionItems) = preProject
 	build\Analyzers.ruleset = build\Analyzers.ruleset
 EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofac.Bot.Api.Services.Abstractions", "src\Autofac.Bot.Api.Services.Abstractions\Autofac.Bot.Api.Services.Abstractions.csproj", "{297A639F-C870-4862-BB1B-D2C56CBA3CA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,18 @@ Global
 		{46F3CCFE-5800-42CB-A1BF-F5A1CF965F9A}.Release|x64.Build.0 = Release|Any CPU
 		{46F3CCFE-5800-42CB-A1BF-F5A1CF965F9A}.Release|x86.ActiveCfg = Release|Any CPU
 		{46F3CCFE-5800-42CB-A1BF-F5A1CF965F9A}.Release|x86.Build.0 = Release|Any CPU
+		{297A639F-C870-4862-BB1B-D2C56CBA3CA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{297A639F-C870-4862-BB1B-D2C56CBA3CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{297A639F-C870-4862-BB1B-D2C56CBA3CA3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{297A639F-C870-4862-BB1B-D2C56CBA3CA3}.Debug|x64.Build.0 = Debug|Any CPU
+		{297A639F-C870-4862-BB1B-D2C56CBA3CA3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{297A639F-C870-4862-BB1B-D2C56CBA3CA3}.Debug|x86.Build.0 = Debug|Any CPU
+		{297A639F-C870-4862-BB1B-D2C56CBA3CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{297A639F-C870-4862-BB1B-D2C56CBA3CA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{297A639F-C870-4862-BB1B-D2C56CBA3CA3}.Release|x64.ActiveCfg = Release|Any CPU
+		{297A639F-C870-4862-BB1B-D2C56CBA3CA3}.Release|x64.Build.0 = Release|Any CPU
+		{297A639F-C870-4862-BB1B-D2C56CBA3CA3}.Release|x86.ActiveCfg = Release|Any CPU
+		{297A639F-C870-4862-BB1B-D2C56CBA3CA3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6FC043FF-382D-4777-8684-C2198200F393} = {1A2EA37C-FD87-4662-BF6A-9805D197432A}
@@ -135,5 +149,6 @@ Global
 		{95337ACF-5D1F-44E8-9D0A-46AA496D55A4} = {1A2EA37C-FD87-4662-BF6A-9805D197432A}
 		{0C4971A2-59F0-4388-94AD-1B31BEADE38A} = {1A2EA37C-FD87-4662-BF6A-9805D197432A}
 		{46F3CCFE-5800-42CB-A1BF-F5A1CF965F9A} = {A71E02E3-F768-4AE8-9EC4-9FD015C229A2}
+		{297A639F-C870-4862-BB1B-D2C56CBA3CA3} = {1A2EA37C-FD87-4662-BF6A-9805D197432A}
 	EndGlobalSection
 EndGlobal

@@ -22,7 +22,8 @@ namespace Autofac.Bot.Api.Controllers.Tests
         private readonly WebApplicationFactoryFixture _webApplicationFactoryFixture;
         private readonly ITestOutputHelper _testOutputHelper;
 
-        public BenchmarkControllerTests(WebApplicationFactoryFixture webApplicationFactoryFixture, ITestOutputHelper testOutputHelper)
+        public BenchmarkControllerTests(WebApplicationFactoryFixture webApplicationFactoryFixture,
+            ITestOutputHelper testOutputHelper)
         {
             _webApplicationFactoryFixture = webApplicationFactoryFixture;
             _testOutputHelper = testOutputHelper;
@@ -34,7 +35,8 @@ namespace Autofac.Bot.Api.Controllers.Tests
             const string childScopeBenchmark = "ChildScopeResolveBenchmark";
             var client = _webApplicationFactoryFixture.Server.CreateClient();
             client.Timeout = TimeSpan.FromMinutes(5);
-            var request = new BenchmarkRequestDto(childScopeBenchmark, true, new RepositoryDto("develop", AutofacRepoUrl),
+            var request = new BenchmarkRequestDto(childScopeBenchmark, true,
+                new RepositoryDto("develop", AutofacRepoUrl),
                 new RepositoryDto("develop", AutofacRepoUrl));
             var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, JsonMediaType);
 
@@ -44,13 +46,14 @@ namespace Autofac.Bot.Api.Controllers.Tests
             _testOutputHelper.WriteLine(output);
             benchmarkResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         }
-        
+
         [Fact]
         public async Task ExecuteBenchmarkAsync_InvalidRef_HttpStatusCodeConflict()
         {
             const string childScopeBenchmark = "ChildScopeResolveBenchmark";
             var client = _webApplicationFactoryFixture.Server.CreateClient();
-            var request = new BenchmarkRequestDto(childScopeBenchmark, true, new RepositoryDto(Guid.NewGuid().ToString().Replace("-", ""), AutofacRepoUrl),
+            var request = new BenchmarkRequestDto(childScopeBenchmark, true,
+                new RepositoryDto(Guid.NewGuid().ToString().Replace("-", ""), AutofacRepoUrl),
                 new RepositoryDto("develop", AutofacRepoUrl));
             var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, JsonMediaType);
 

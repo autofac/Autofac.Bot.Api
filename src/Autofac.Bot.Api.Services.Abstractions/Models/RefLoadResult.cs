@@ -1,4 +1,4 @@
-namespace Autofac.Bot.Api.Services.Models
+namespace Autofac.Bot.Api.Services.Abstractions.Models
 {
     public class RefLoadResult
     {

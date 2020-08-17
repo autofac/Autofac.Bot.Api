@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac.Bot.Api.Services;
+using Autofac.Bot.Api.Services.Abstractions;
 using Autofac.Bot.Api.UseCases.Abstractions.Commands;
 using Autofac.Bot.Api.UseCases.Abstractions.Exceptions;
 using Autofac.Bot.Api.UseCases.Abstractions.Models;
@@ -24,17 +24,17 @@ namespace Autofac.Bot.Api.UseCases.Commands
             "Autofac.Benchmarks.csproj"
         };
 
-        private readonly BenchmarkRunner _benchmarkRunner;
-        private readonly RepositoryCloner _cloner;
+        private readonly IBenchmarkRunner _benchmarkRunner;
+        private readonly IRepositoryCloner _cloner;
         private readonly ILogger<ExecuteBenchmarkCommandHandler> _logger;
-        private readonly ProjectPublisher _projectPublisher;
+        private readonly IProjectPublisher _projectPublisher;
 
-        private readonly RefLoader _refLoader;
-        private readonly SummaryExtractor _summaryExtractor;
+        private readonly IRefLoader _refLoader;
+        private readonly ISummaryExtractor _summaryExtractor;
 
 
-        public ExecuteBenchmarkCommandHandler(RefLoader refLoader, BenchmarkRunner benchmarkRunner,
-            RepositoryCloner cloner, ProjectPublisher projectPublisher, SummaryExtractor summaryExtractor,
+        public ExecuteBenchmarkCommandHandler(IRefLoader refLoader, IBenchmarkRunner benchmarkRunner,
+            IRepositoryCloner cloner, IProjectPublisher projectPublisher, ISummaryExtractor summaryExtractor,
             ILogger<ExecuteBenchmarkCommandHandler> logger)
         {
             _refLoader = refLoader;
@@ -70,16 +70,17 @@ namespace Autofac.Bot.Api.UseCases.Commands
 
             if (!publishResult.Succeeded) throw new PublishException("Failed to publish project", publishResult.Error!);
 
-            var (output, succeeded) =
+            var benchmarkRunResult =
                 await _benchmarkRunner.RunAsync(publishResult.PublishUri!,
                     BenchmarkAssemblyName,
                     request.Benchmark);
 
             SafeDeleteDirectory(cloneResult.CloneBasePath!);
 
-            var summary = _summaryExtractor.ExtractSummary(output);
+            var summary = _summaryExtractor.ExtractSummary(benchmarkRunResult.Output);
 
-            return new BenchmarkResult(request.Repository, request.RepositoryTarget, succeeded, summary, output);
+            return new BenchmarkResult(request.Repository, request.RepositoryTarget, benchmarkRunResult.Succeeded,
+                summary, benchmarkRunResult.Output);
         }
 
         private void SafeDeleteDirectory(Uri cloneBasePath)

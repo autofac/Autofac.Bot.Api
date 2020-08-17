@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -49,7 +48,7 @@ namespace Autofac.Bot.Api.UseCases.Commands
             CancellationToken cancellationToken)
         {
             var cloneResult = await _cloner.CloneAync(new Uri(request.Repository.Url),
-                request.RepositoryTarget.ToString(), Activity.Current.TraceId.ToHexString());
+                request.RepositoryTarget.ToString(), request.TraceIdentifier);
 
             if (!cloneResult.Succeeded)
                 throw new RepositoryCloneException($"Failed to clone repository with  URL: {request.Repository.Url}",

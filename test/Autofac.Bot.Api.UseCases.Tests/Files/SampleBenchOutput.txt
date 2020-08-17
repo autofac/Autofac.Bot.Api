@@ -1,0 +1,167 @@
+// Validating benchmarks:
+// ***** BenchmarkRunner: Start   *****
+// ***** Found 1 benchmark(s) in total *****
+// ***** Building 1 exe(s) in Parallel: Start   *****
+// ***** Done, took 00:00:00 (0.04 sec)   *****
+// Found 1 benchmarks:
+//   DeepGraphResolveBenchmark.Resolve: Job-XUDWRT(Toolchain=InProcessEmitToolchain)
+
+// **************************
+// Benchmark: DeepGraphResolveBenchmark.Resolve: Job-XUDWRT(Toolchain=InProcessEmitToolchain)
+// *** Execute ***
+// Launch: 1 / 1
+
+// Benchmark Process Environment Information:
+// Runtime=.NET Core 3.1.6 (CoreCLR 4.700.20.26901, CoreFX 4.700.20.31603), X64 RyuJIT
+// GC=Concurrent Workstation
+// Job: Job-XUDWRT(Toolchain=InProcessEmitToolchain)
+
+OverheadJitting  1: 1 op, 95000.00 ns, 95.0000 us/op
+WorkloadJitting  1: 1 op, 9284600.00 ns, 9.2846 ms/op
+
+OverheadJitting  2: 16 op, 159400.00 ns, 9.9625 us/op
+WorkloadJitting  2: 16 op, 641900.00 ns, 40.1187 us/op
+
+WorkloadPilot    1: 16 op, 473800.00 ns, 29.6125 us/op
+WorkloadPilot    2: 32 op, 945600.00 ns, 29.5500 us/op
+WorkloadPilot    3: 64 op, 1873500.00 ns, 29.2734 us/op
+WorkloadPilot    4: 128 op, 4039800.00 ns, 31.5609 us/op
+WorkloadPilot    5: 256 op, 8044900.00 ns, 31.4254 us/op
+WorkloadPilot    6: 512 op, 16252100.00 ns, 31.7424 us/op
+WorkloadPilot    7: 1024 op, 28729800.00 ns, 28.0564 us/op
+WorkloadPilot    8: 2048 op, 57096300.00 ns, 27.8791 us/op
+WorkloadPilot    9: 4096 op, 104519700.00 ns, 25.5175 us/op
+WorkloadPilot   10: 8192 op, 120881700.00 ns, 14.7561 us/op
+WorkloadPilot   11: 16384 op, 239313400.00 ns, 14.6065 us/op
+WorkloadPilot   12: 32768 op, 465599100.00 ns, 14.2090 us/op
+WorkloadPilot   13: 65536 op, 937247100.00 ns, 14.3013 us/op
+
+OverheadWarmup   1: 65536 op, 81900.00 ns, 1.2497 ns/op
+OverheadWarmup   2: 65536 op, 100500.00 ns, 1.5335 ns/op
+OverheadWarmup   3: 65536 op, 80000.00 ns, 1.2207 ns/op
+OverheadWarmup   4: 65536 op, 79900.00 ns, 1.2192 ns/op
+OverheadWarmup   5: 65536 op, 80100.00 ns, 1.2222 ns/op
+OverheadWarmup   6: 65536 op, 80300.00 ns, 1.2253 ns/op
+OverheadWarmup   7: 65536 op, 80400.00 ns, 1.2268 ns/op
+OverheadWarmup   8: 65536 op, 80500.00 ns, 1.2283 ns/op
+OverheadWarmup   9: 65536 op, 80300.00 ns, 1.2253 ns/op
+
+OverheadActual   1: 65536 op, 80500.00 ns, 1.2283 ns/op
+OverheadActual   2: 65536 op, 82900.00 ns, 1.2650 ns/op
+OverheadActual   3: 65536 op, 80500.00 ns, 1.2283 ns/op
+OverheadActual   4: 65536 op, 79500.00 ns, 1.2131 ns/op
+OverheadActual   5: 65536 op, 80500.00 ns, 1.2283 ns/op
+OverheadActual   6: 65536 op, 80400.00 ns, 1.2268 ns/op
+OverheadActual   7: 65536 op, 80300.00 ns, 1.2253 ns/op
+OverheadActual   8: 65536 op, 80300.00 ns, 1.2253 ns/op
+OverheadActual   9: 65536 op, 80400.00 ns, 1.2268 ns/op
+OverheadActual  10: 65536 op, 79900.00 ns, 1.2192 ns/op
+OverheadActual  11: 65536 op, 85100.00 ns, 1.2985 ns/op
+OverheadActual  12: 65536 op, 80300.00 ns, 1.2253 ns/op
+OverheadActual  13: 65536 op, 80400.00 ns, 1.2268 ns/op
+OverheadActual  14: 65536 op, 80300.00 ns, 1.2253 ns/op
+OverheadActual  15: 65536 op, 80400.00 ns, 1.2268 ns/op
+
+WorkloadWarmup   1: 65536 op, 951056100.00 ns, 14.5120 us/op
+WorkloadWarmup   2: 65536 op, 939845500.00 ns, 14.3409 us/op
+WorkloadWarmup   3: 65536 op, 936130600.00 ns, 14.2842 us/op
+WorkloadWarmup   4: 65536 op, 937939000.00 ns, 14.3118 us/op
+WorkloadWarmup   5: 65536 op, 941392300.00 ns, 14.3645 us/op
+WorkloadWarmup   6: 65536 op, 942836100.00 ns, 14.3865 us/op
+WorkloadWarmup   7: 65536 op, 940256900.00 ns, 14.3472 us/op
+WorkloadWarmup   8: 65536 op, 940974600.00 ns, 14.3581 us/op
+WorkloadWarmup   9: 65536 op, 943230100.00 ns, 14.3925 us/op
+WorkloadWarmup  10: 65536 op, 950507900.00 ns, 14.5036 us/op
+WorkloadWarmup  11: 65536 op, 944834000.00 ns, 14.4170 us/op
+
+WorkloadActual   1: 65536 op, 944888700.00 ns, 14.4179 us/op
+WorkloadActual   2: 65536 op, 941429500.00 ns, 14.3651 us/op
+WorkloadActual   3: 65536 op, 941844100.00 ns, 14.3714 us/op
+WorkloadActual   4: 65536 op, 960970500.00 ns, 14.6632 us/op
+WorkloadActual   5: 65536 op, 929492700.00 ns, 14.1829 us/op
+WorkloadActual   6: 65536 op, 932890000.00 ns, 14.2348 us/op
+WorkloadActual   7: 65536 op, 929937800.00 ns, 14.1897 us/op
+WorkloadActual   8: 65536 op, 929101400.00 ns, 14.1770 us/op
+WorkloadActual   9: 65536 op, 931222500.00 ns, 14.2093 us/op
+WorkloadActual  10: 65536 op, 934259200.00 ns, 14.2557 us/op
+WorkloadActual  11: 65536 op, 932987700.00 ns, 14.2363 us/op
+WorkloadActual  12: 65536 op, 932061000.00 ns, 14.2221 us/op
+WorkloadActual  13: 65536 op, 935282800.00 ns, 14.2713 us/op
+WorkloadActual  14: 65536 op, 934156600.00 ns, 14.2541 us/op
+WorkloadActual  15: 65536 op, 943473700.00 ns, 14.3963 us/op
+
+WorkloadResult   1: 65536 op, 944808300.00 ns, 14.4166 us/op
+WorkloadResult   2: 65536 op, 941349100.00 ns, 14.3638 us/op
+WorkloadResult   3: 65536 op, 941763700.00 ns, 14.3702 us/op
+WorkloadResult   4: 65536 op, 929412300.00 ns, 14.1817 us/op
+WorkloadResult   5: 65536 op, 932809600.00 ns, 14.2335 us/op
+WorkloadResult   6: 65536 op, 929857400.00 ns, 14.1885 us/op
+WorkloadResult   7: 65536 op, 929021000.00 ns, 14.1757 us/op
+WorkloadResult   8: 65536 op, 931142100.00 ns, 14.2081 us/op
+WorkloadResult   9: 65536 op, 934178800.00 ns, 14.2544 us/op
+WorkloadResult  10: 65536 op, 932907300.00 ns, 14.2350 us/op
+WorkloadResult  11: 65536 op, 931980600.00 ns, 14.2209 us/op
+WorkloadResult  12: 65536 op, 935202400.00 ns, 14.2701 us/op
+WorkloadResult  13: 65536 op, 934076200.00 ns, 14.2529 us/op
+WorkloadResult  14: 65536 op, 943393300.00 ns, 14.3950 us/op
+GC:  135 3 0 1135083520 65536
+Threading:  2 0 65536
+
+
+Mean = 14.269 us, StdErr = 0.022 us (0.15%), N = 14, StdDev = 0.083 us
+Min = 14.176 us, Q1 = 14.211 us, Median = 14.244 us, Q3 = 14.340 us, Max = 14.417 us
+IQR = 0.129 us, LowerFence = 14.018 us, UpperFence = 14.534 us
+ConfidenceInterval = [14.176 us; 14.362 us] (CI 99.9%), Margin = 0.093 us (0.65% of Mean)
+Skewness = 0.59, Kurtosis = 1.71, MValue = 2
+
+// ***** BenchmarkRunner: Finish  *****
+
+// * Export *
+  BenchmarkDotNet.Artifacts\08-08-2020_08-08-48\results\Autofac.Benchmarks.DeepGraphResolveBenchmark-report.csv
+  BenchmarkDotNet.Artifacts\08-08-2020_08-08-48\results\Autofac.Benchmarks.DeepGraphResolveBenchmark-report-github.md
+  BenchmarkDotNet.Artifacts\08-08-2020_08-08-48\results\Autofac.Benchmarks.DeepGraphResolveBenchmark-report.html
+
+// * Detailed results *
+DeepGraphResolveBenchmark.Resolve: Job-XUDWRT(Toolchain=InProcessEmitToolchain)
+Runtime = ; GC = 
+Mean = 14.269 us, StdErr = 0.022 us (0.15%), N = 14, StdDev = 0.083 us
+Min = 14.176 us, Q1 = 14.211 us, Median = 14.244 us, Q3 = 14.340 us, Max = 14.417 us
+IQR = 0.129 us, LowerFence = 14.018 us, UpperFence = 14.534 us
+ConfidenceInterval = [14.176 us; 14.362 us] (CI 99.9%), Margin = 0.093 us (0.65% of Mean)
+Skewness = 0.59, Kurtosis = 1.71, MValue = 2
+-------------------- Histogram --------------------
+[14.131 us ; 14.462 us) | @@@@@@@@@@@@@@
+---------------------------------------------------
+
+// * Summary *
+
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.19041.388 (2004/?/20H1)
+AMD Ryzen 9 3950X, 1 CPU, 32 logical and 16 physical cores
+.NET Core SDK=3.1.302
+  [Host] : .NET Core 3.1.6 (CoreCLR 4.700.20.26901, CoreFX 4.700.20.31603), X64 RyuJIT
+
+Toolchain=InProcessEmitToolchain  
+
+|  Method |     Mean |    Error |   StdDev |  Gen 0 |  Gen 1 | Gen 2 | Allocated |
+|-------- |---------:|---------:|---------:|-------:|-------:|------:|----------:|
+| Resolve | 14.27 us | 0.093 us | 0.083 us | 2.0599 | 0.0458 |     - |  16.91 KB |
+
+// * Legends *
+  Mean      : Arithmetic mean of all measurements
+  Error     : Half of 99.9% confidence interval
+  StdDev    : Standard deviation of all measurements
+  Gen 0     : GC Generation 0 collects per 1000 operations
+  Gen 1     : GC Generation 1 collects per 1000 operations
+  Gen 2     : GC Generation 2 collects per 1000 operations
+  Allocated : Allocated memory per single operation (managed only, inclusive, 1KB = 1024B)
+  1 us      : 1 Microsecond (0.000001 sec)
+
+// * Diagnostic Output - MemoryDiagnoser *
+
+
+// ***** BenchmarkRunner: End *****
+// ** Remained 0 benchmark(s) to run **
+Run time: 00:00:27 (27.9 sec), executed benchmarks: 1
+
+Global total time: 00:00:27 (27.95 sec), executed benchmarks: 1
+// * Artifacts cleanup *

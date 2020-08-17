@@ -6,14 +6,17 @@ namespace Autofac.Bot.Api.UseCases.Abstractions.Commands
 {
     public class ExecuteBenchmarkCommand : IRequest<BenchmarkResult>
     {
-        public ExecuteBenchmarkCommand(string benchmark, Repository repository, RepositoryTarget repositoryTarget)
+        public ExecuteBenchmarkCommand(string benchmark, string traceIdentifier, Repository repository, RepositoryTarget repositoryTarget)
         {
             Benchmark = benchmark;
+            TraceIdentifier = traceIdentifier;
             Repository = repository;
             RepositoryTarget = repositoryTarget;
         }
 
         public string Benchmark { get; }
+
+        public string TraceIdentifier { get; }
 
         public Repository Repository { get; }
 

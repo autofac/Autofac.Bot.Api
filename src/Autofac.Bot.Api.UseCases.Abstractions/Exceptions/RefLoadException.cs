@@ -4,9 +4,9 @@ namespace Autofac.Bot.Api.UseCases.Abstractions.Exceptions
 {
     public class RefLoadException : Exception
     {
-        public RefLoadException(string message, string refCheckoutError) : base(message)
+        public RefLoadException(string message, string refLoadError) : base(message)
         {
-            RefLoadError = refCheckoutError;
+            RefLoadError = refLoadError;
         }
 
         public string RefLoadError { get; }

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac.Bot.Api.Controllers.Presentation;
@@ -20,12 +21,14 @@ namespace Autofac.Bot.Api.Controllers.V1
             [FromBody] BenchmarkRequestDto benchmarkRequest)
         {
             var targetExecutionCommand = new ExecuteBenchmarkCommand(benchmarkRequest.Benchmark,
+                Activity.Current.TraceId.ToHexString(),
                 new Repository(benchmarkRequest.TargetRepository.Ref, benchmarkRequest.TargetRepository.Url),
                 RepositoryTarget.Target);
 
             var targetResult = await mediator.Send(targetExecutionCommand);
 
             var sourceExecutionCommand = new ExecuteBenchmarkCommand(benchmarkRequest.Benchmark,
+                Activity.Current.TraceId.ToHexString(),
                 new Repository(benchmarkRequest.SourceRepository.Ref, benchmarkRequest.SourceRepository.Url),
                 RepositoryTarget.Source);
 

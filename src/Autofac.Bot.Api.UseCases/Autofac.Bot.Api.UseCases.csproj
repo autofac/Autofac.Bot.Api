@@ -5,8 +5,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Autofac.Bot.Api.Services\Autofac.Bot.Api.Services.csproj" />
+      <ProjectReference Include="..\Autofac.Bot.Api.Services.Abstractions\Autofac.Bot.Api.Services.Abstractions.csproj" />
       <ProjectReference Include="..\Autofac.Bot.Api.UseCases.Abstractions\Autofac.Bot.Api.UseCases.Abstractions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.7" />
     </ItemGroup>
 
 </Project>

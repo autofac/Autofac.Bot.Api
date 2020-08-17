@@ -1,11 +1,13 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable MemberCanBePrivate.Global
+
 namespace Autofac.Bot.Api.Controllers.Presentation
 {
     public class BenchmarkRequestDto
     {
-        public BenchmarkRequestDto(string benchmark, bool verbose, RepositoryDto targetRepository, RepositoryDto sourceRepository)
+        public BenchmarkRequestDto(string benchmark, bool verbose, RepositoryDto targetRepository,
+            RepositoryDto sourceRepository)
         {
             Benchmark = benchmark;
             Verbose = verbose;
@@ -16,11 +18,10 @@ namespace Autofac.Bot.Api.Controllers.Presentation
         // ReSharper disable once UnusedMember.Local
         private BenchmarkRequestDto()
         {
-            
         }
-        
+
         public string Benchmark { get; set; } = null!;
-        
+
         public bool Verbose { get; set; }
 
         public RepositoryDto TargetRepository { get; set; } = null!;

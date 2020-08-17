@@ -1,13 +1,15 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Autofac.Bot.Api.Services.Abstractions;
+using Autofac.Bot.Api.Services.Abstractions.Models;
 using Autofac.Bot.Api.Services.Tools;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 
 namespace Autofac.Bot.Api.Services
 {
-    public class BenchmarkRunner
+    public class BenchmarkRunner : IBenchmarkRunner
     {
         private readonly ILogger<BenchmarkRunner> _logger;
 
@@ -16,7 +18,7 @@ namespace Autofac.Bot.Api.Services
             _logger = logger;
         }
 
-        public async Task<(string output, bool succeeded)> RunAsync(Uri benchmarkBinariesUri, string assemblyName,
+        public async Task<BenchmarkRunResult> RunAsync(Uri benchmarkBinariesUri, string assemblyName,
             string benchmarkName)
         {
             var currentDirectory = Directory.GetCurrentDirectory();
@@ -33,7 +35,9 @@ namespace Autofac.Bot.Api.Services
                 _logger.LogError("Failed to execute Benchmark. Error:{newLine}{error}}", Environment.NewLine,
                     benchmarkError);
 
-            return succeeded ? (benchmarkOutput, succeeded) : (benchmarkError, succeeded);
+            return succeeded
+                ? new BenchmarkRunResult(true, benchmarkOutput)
+                : new BenchmarkRunResult(false, benchmarkError);
         }
     }
 }

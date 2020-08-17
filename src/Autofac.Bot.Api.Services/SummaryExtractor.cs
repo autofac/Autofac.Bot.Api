@@ -1,8 +1,9 @@
 using System;
+using Autofac.Bot.Api.Services.Abstractions;
 
 namespace Autofac.Bot.Api.Services
 {
-    public class SummaryExtractor
+    public class SummaryExtractor : ISummaryExtractor
     {
         // ReSharper disable once MemberCanBeMadeStatic.Global
         public string ExtractSummary(string benchmarkOutput)

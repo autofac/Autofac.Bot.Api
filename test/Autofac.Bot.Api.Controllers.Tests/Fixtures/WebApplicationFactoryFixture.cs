@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Hosting;
+
 // ReSharper disable ClassNeverInstantiated.Global
 
 namespace Autofac.Bot.Api.Controllers.Tests.Fixtures

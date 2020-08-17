@@ -4,7 +4,8 @@ namespace Autofac.Bot.Api.UseCases.Abstractions.Models
 {
     public class BenchmarkResult
     {
-        public BenchmarkResult(Repository repository, RepositoryTarget repositoryTarget, bool succeeded, string summary, string output)
+        public BenchmarkResult(Repository repository, RepositoryTarget repositoryTarget, bool succeeded, string summary,
+            string output)
         {
             Repository = repository;
             RepositoryTarget = repositoryTarget;

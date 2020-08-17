@@ -1,14 +1,15 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Autofac.Bot.Api.Services.Models;
+using Autofac.Bot.Api.Services.Abstractions;
+using Autofac.Bot.Api.Services.Abstractions.Models;
 using Autofac.Bot.Api.Services.Tools;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 
 namespace Autofac.Bot.Api.Services
 {
-    public class RepositoryCloner
+    public class RepositoryCloner : IRepositoryCloner
     {
         private readonly ILogger<RepositoryCloner> _logger;
 
@@ -22,7 +23,7 @@ namespace Autofac.Bot.Api.Services
         {
             var cloneBasePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 ".autofacbot",
-                traceIdentifier, target.ToString());
+                traceIdentifier, target);
 
             var clonePath = Path.Combine(cloneBasePath, "src");
 
